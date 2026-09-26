@@ -1566,3 +1566,1208 @@ code, .mono {
 .dia .map-c .d-line { stroke-width: 1; opacity: 0.55; }
 .dark .dia .map-c .d-line { opacity: 0.5; }
 .dia .map-r .d-t { font-weight: 500; }
+
+
+/* ------------------------------------------------------------ the demo */
+
+/* Section 02, rebuilt as a replica of the screen itself rather than a
+   case-study-coloured approximation of it.
+
+   Every value below is either lifted from workperks-web/src/styles (theme.css
+   and v4.css, the app's own tokens and its .chatai / .cav / .cbub / .cme /
+   .cchip / .chatbar rules) or sampled straight out of
+   public/screens/03-cannot.webp, which is the same screen sitting further down
+   this page. The page's own teal system stops at the bezel. */
+
+.vh {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.demo-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 20.5rem) minmax(0, 1fr);
+  gap: clamp(1.75rem, 4vw, 3.5rem);
+  align-items: start;
+  margin-top: var(--stack);
+}
+
+.demo-phone { position: sticky; top: calc(var(--topbar) + 1.5rem); }
+
+/* ---- the app's own tokens, scoped to the replica ---- */
+.dm-frame,
+.fb-answer {
+  --wp-ink:      #141414;
+  --wp-ink2:     #4A4A48;
+  --wp-soft:     #6E6A64;
+  --wp-faint:    #9A968E;
+  --wp-amber:    #D2802D;
+  --wp-amber-dp: #C4610A;
+  --wp-amber-lt: #FFD9A0;
+  --wp-chip-ink: #7D4A10;
+  --wp-line:     rgba(0, 0, 0, 0.08);
+  --wp-hair:     #F0DFCC;
+  --wp-shadow:   0 8px 24px rgba(0, 0, 0, 0.08);
+  --wp-sans:     -apple-system, "SF Pro Text", "Inter", system-ui, sans-serif;
+}
+
+.dm-frame {
+  position: relative;
+  border-radius: 44px;
+  padding: 9px;
+  background: #FFFFFF;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.09),
+    0 30px 90px rgba(31, 25, 20, 0.45);
+}
+
+.dm-screen {
+  display: flex;
+  flex-direction: column;
+  height: 34rem;
+  max-height: 72vh;
+  border-radius: 36px;
+  overflow: hidden;
+  /* sampled top to bottom out of the screenshot */
+  background: linear-gradient(180deg, #F1CFAC 0%, #F6DBBD 26%, #FAE6D4 54%, #FEF3EA 84%);
+  font-family: var(--wp-sans);
+  color: var(--wp-ink2);
+}
+
+/* the app's faint dot texture, .grain in the employee app */
+.dm-screen::before {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border-radius: 36px;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image: radial-gradient(rgba(180, 120, 60, 0.16) 0.5px, transparent 0.5px);
+  background-size: 7px 7px;
+}
+
+/* ---- status bar and header ---- */
+.dm-status {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 1.25rem 0.2rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #3A1D08;
+}
+.dm-batt {
+  width: 1.4rem; height: 0.72rem;
+  border: 1px solid rgba(58, 29, 8, 0.55);
+  border-radius: 3px;
+  position: relative;
+}
+.dm-batt::before {
+  content: ""; position: absolute; inset: 1.5px;
+  background: rgba(58, 29, 8, 0.75); border-radius: 1px;
+}
+
+.dm-bar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.35rem 1rem 0.7rem;
+  border-bottom: 1px solid rgba(160, 110, 60, 0.16);
+}
+.dm-back {
+  flex: none;
+  width: 1.9rem; height: 1.9rem;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: #FAE8D7;
+  font-size: 1rem;
+  color: #8A5A28;
+}
+.dm-bar-t { display: block; min-width: 0; }
+.dm-bar-t b {
+  display: block;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #341A05;
+}
+.dm-bar-t i {
+  display: block;
+  margin-top: 1px;
+  font-style: normal;
+  font-size: 0.8125rem;
+  color: #8A6A50;
+}
+
+/* ---- the thread ---- */
+.dm-thread {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1rem 1.25rem 1.25rem;
+  scrollbar-width: thin;
+}
+
+/* .cme — right-aligned, and the span is the bubble */
+.dm-me { display: flex; justify-content: flex-end; margin-bottom: 1rem; }
+.dm-me span {
+  max-width: 82%;
+  padding: 0.7rem 0.95rem;
+  border-radius: 18px 18px 6px 18px;
+  background: linear-gradient(180deg, #D07A17, #C4610A);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: #FFFEF3;
+  box-shadow: 0 6px 16px rgba(160, 80, 4, 0.28);
+}
+
+.dm-supplied {
+  max-width: 82%;
+  margin: -0.6rem 0 1rem auto;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  text-align: right;
+  color: #8A6A50;
+}
+
+/* .chatai — avatar and bubble, top aligned */
+.dm-ai { display: flex; gap: 0.7rem; align-items: flex-start; margin-bottom: 1.25rem; }
+.dm-av {
+  flex: 0 0 2.25rem;
+  width: 2.25rem; height: 2.25rem;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: radial-gradient(circle at 34% 28%, #FFF0D6, var(--wp-amber-lt) 22%, #EF8611 58%, var(--wp-amber-dp));
+  box-shadow: 0 5px 14px rgba(160, 80, 4, 0.34);
+}
+.dm-av svg { width: 0.95rem; height: 0.95rem; fill: currentColor; }
+
+/* .cbub — the answer card */
+.dm-bub {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0.9rem 1rem;
+  border-radius: 18px 18px 18px 6px;
+  background: linear-gradient(180deg, #FFFCFA, #FCEEDF);
+  box-shadow: var(--wp-shadow);
+  animation: dm-in 0.34s var(--ease) both;
+}
+@keyframes dm-in { from { opacity: 0; transform: translateY(6px); } }
+
+/* .p */
+.dm-p {
+  margin: 0 0 0.75rem;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  letter-spacing: -0.006em;
+  color: var(--wp-ink2);
+}
+.dm-p:last-child { margin-bottom: 0; }
+
+/* .sec, and .sec.qual for a title long enough to be a sentence */
+.dm-sec {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.012em;
+  color: var(--wp-ink);
+}
+.dm-sec.is-qual { font-size: 0.9375rem; font-weight: 600; color: var(--wp-ink2); }
+.dm-esub { margin-top: 0.25rem; font-size: 0.8125rem; line-height: 1.4; color: var(--wp-soft); }
+.dm-head { margin-bottom: 0.75rem; }
+
+/* .note, .note.bad, .note.warn */
+.dm-note {
+  margin-bottom: 0.875rem;
+  padding: 0.9rem;
+  border-radius: 18px;
+  background: #FFF3E7;
+  box-shadow: var(--wp-shadow);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--wp-ink2);
+}
+.dm-note.is-error { background: #FBE4E0; color: #8E3323; }
+.dm-n-title { margin: 0; font-weight: 700; }
+.dm-n-body { margin: 0.25rem 0 0; }
+
+/* .stack / .row — label, value, hairline */
+.dm-rows { margin-bottom: 0.5rem; }
+.dm-r-title {
+  margin: 0 0 0.6rem;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.012em;
+  color: var(--wp-ink);
+}
+.dm-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.8rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--wp-line);
+  background: none;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+}
+.dm-row:last-child { border-bottom: 0; }
+button.dm-row { cursor: pointer; }
+.dm-row > span:first-child { min-width: 0; }
+.dm-r-label {
+  display: block;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--wp-ink);
+}
+.dm-r-value {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  color: var(--wp-soft);
+}
+.dm-chev { flex: none; color: var(--wp-faint); font-size: 1rem; }
+
+/* .cra / .crgo — the solid amber action */
+.dm-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.45rem; margin-top: 0.6rem; }
+.dm-action {
+  padding: 0.45rem 0.85rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--wp-amber);
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 5px 14px rgba(160, 80, 4, 0.3);
+}
+.dm-action:hover { background: #C97420; }
+
+/* .cchips / .cchip — white pill, amber text, as the screen shows them */
+.dm-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.875rem; }
+.dm-chip {
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--wp-hair);
+  border-radius: 999px;
+  background: #FFFBF9;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--wp-chip-ink);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(160, 100, 40, 0.10);
+  transition: background 0.18s var(--ease);
+}
+.dm-chip:hover { background: #FFF3E4; }
+
+/* the standing row under the thread, .cchips with .cchip.clr for Start over */
+.dm-standing { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.25rem; }
+.dm-chip.is-clear { background: none; border-color: rgba(0, 0, 0, 0.12); color: var(--wp-soft); box-shadow: none; }
+
+/* .chatai while busy — Chat.tsx spells the state out rather than animating it */
+.dm-thinking { opacity: 0.55; }
+
+/* .dock / .chatbar / .field / .chatsend */
+.dm-form {
+  flex: none;
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  padding: 0.75rem 1rem 1.1rem;
+}
+.dm-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0.85rem 1.1rem;
+  border: 0;
+  border-radius: 999px;
+  background: #FFFDFC;
+  box-shadow: 0 6px 18px rgba(120, 70, 20, 0.12);
+  font-family: inherit;
+  font-size: 0.875rem;
+  color: var(--wp-ink);
+}
+.dm-input::placeholder { color: #A08869; }
+.dm-input:focus-visible { outline: 2px solid var(--wp-amber-dp); outline-offset: 1px; }
+.dm-send {
+  flex: none;
+  width: 2.65rem; height: 2.65rem;
+  display: grid; place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: var(--wp-amber-dp);
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(160, 80, 4, 0.36);
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.3, 1), background 0.2s;
+}
+.dm-send:hover { background: #D2802D; }
+.dm-send:active { transform: scale(0.92); }
+
+/* ---- the page's own furniture around the replica ---- */
+.dm-tape {
+  margin: 0.85rem 0 0;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+.dm-tape b { font-weight: 400; color: var(--accent-night); }
+:not(.dark) .dm-tape b { color: var(--accent); }
+
+.demo-notes > .label:first-child { margin-top: 0; }
+.demo-notes > .label { display: block; margin-top: 1.75rem; }
+.dm-starters { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.75rem; }
+.demo-notes .aside { margin-top: 1.75rem; }
+
+/* the starters sit on the page, not in the app, so they take the page's chip */
+.dm-starters .dm-chip {
+  border-color: var(--n-rule);
+  background: none;
+  box-shadow: none;
+  font-weight: 400;
+  color: var(--n-ink-2);
+}
+.dm-starters .dm-chip:hover { border-color: var(--accent-night); color: var(--accent-night); background: none; }
+
+@media (max-width: 900px) {
+  .demo-stage { grid-template-columns: minmax(0, 1fr); }
+  .demo-phone { position: static; max-width: 22.5rem; }
+  .dm-screen { height: 30rem; }
+}
+@media (max-width: 560px) {
+  .demo-phone { max-width: none; }
+  .dm-frame { border-radius: 38px; padding: 7px; }
+  .dm-screen { height: 27rem; max-height: 68vh; border-radius: 32px; }
+  .dm-screen::before { inset: 7px; border-radius: 32px; }
+  .dm-me span { max-width: 88%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dm-bub { animation: none; }
+  .dm-chip, .dm-send { transition: none; }
+}
+
+/* The demo's own phone pass, matching the one above: the small sizes come up
+   to 12.8px and every tappable thing reaches 44px. */
+@media (max-width: 640px) {
+  .dm-chip, .dm-r-value, .dm-esub, .dm-tape, .dm-action { font-size: 0.8rem; }
+  .dm-chip, .dm-action {
+    min-height: 44px;
+    display: grid;
+    place-items: center;
+    padding-block: 0.5rem;
+  }
+  .dm-chips, .dm-starters, .dm-standing, .dm-actions { align-items: center; }
+  .dm-row { min-height: 44px; }
+  .dm-input, .dm-send { min-height: 44px; }
+}
+
+
+/* --------------------------------------------------------- hero, part two */
+
+/* The status moved up beside the kicker so the meta row below it could carry
+   My role, which used to be a section of its own. */
+.hero-state {
+  display: inline-block;
+  margin-left: 0.85rem;
+  padding: 0.18rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  letter-spacing: 0.06em;
+  color: var(--fg-2);
+  white-space: nowrap;
+}
+
+/* The thirteen tool names, which is the whole tool layer stated in one row.
+   Teal marks the ones actually running in the demo below, the same way the
+   accent marks a claim a tool returned everywhere else on the page. */
+.hero-tools { margin-top: clamp(2.5rem, 6vw, 4.5rem); }
+
+.ht-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1rem;
+  list-style: none;
+}
+.ht-list li { display: inline-flex; }
+.ht-list button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: none;
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  line-height: 1.4;
+  color: var(--fg-3);
+  cursor: pointer;
+  transition: border-color 0.18s var(--ease), color 0.18s var(--ease), background 0.18s var(--ease);
+}
+.ht-list button:hover { border-color: var(--fg-3); color: var(--fg); }
+.ht-list button.ht-on {
+  border-color: var(--accent-edge);
+  color: var(--accent-night);
+}
+:not(.dark) .ht-list button.ht-on { color: var(--accent); }
+.ht-list button.ht-on:hover { border-color: var(--accent-night); }
+.ht-list button[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--accent-night) 12%, transparent);
+  border-color: color-mix(in srgb, var(--accent-night) 45%, transparent);
+}
+.ht-dot {
+  width: 0.34rem;
+  height: 0.34rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+.ht-key {
+  max-width: 46em;
+  margin-top: 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--fg-3);
+}
+.ht-key code {
+  font-family: var(--mono);
+  font-size: 0.86em;
+  color: var(--fg-2);
+}
+.ht-key a { color: var(--accent-night); text-decoration: none; border-bottom: 1px solid var(--accent-edge); }
+:not(.dark) .ht-key a { color: var(--accent); }
+
+@media (max-width: 900px) {
+  .meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .hero-state { margin-left: 0; margin-top: 0.6rem; }
+  .ht-list li { font-size: 0.8rem; }
+}
+@media (max-width: 420px) {
+  .meta { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* one line under the ribbon, rewritten on every pick */
+.ht-note {
+  min-height: 1.4em;
+  margin-top: 0.85rem;
+  max-width: 46em;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--fg-2);
+}
+
+/* ------------------------------------------------ the ladder, played live */
+
+.fb {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: clamp(1.75rem, 4vw, 3.5rem);
+  align-items: start;
+  margin-top: var(--stack);
+  padding-top: var(--stack);
+  border-top: 1px solid var(--line);
+}
+.fb .label { display: block; }
+.fb-controls > .label + div { margin-top: 0.75rem; }
+.fb-controls > div + .label { margin-top: 1.75rem; }
+
+.fb-qs { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.fb-q {
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: none;
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--fg-2);
+  cursor: pointer;
+  transition: border-color 0.18s var(--ease), color 0.18s var(--ease);
+}
+.fb-q:hover { border-color: var(--fg-3); color: var(--fg); }
+.fb-q[aria-pressed="true"] { border-color: var(--accent-night); color: var(--accent-night); }
+
+.fb-rungs { display: grid; gap: 1px; }
+.fb-rung {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.7rem 0.2rem;
+  border: 0;
+  border-top: 1px solid var(--line);
+  background: none;
+  font: inherit;
+  font-size: 0.95rem;
+  text-align: left;
+  color: var(--fg-2);
+  cursor: pointer;
+  transition: color 0.18s var(--ease), background 0.18s var(--ease);
+}
+.fb-rung b { font-family: var(--mono); font-size: 0.68rem; font-weight: 400; color: var(--fg-3); }
+.fb-rung:hover { background: rgba(243, 242, 238, 0.04); color: var(--fg); }
+.fb-rung[aria-pressed="true"] { color: var(--accent-night); }
+.fb-rung[aria-pressed="true"] b { color: var(--accent-night); }
+
+.fb-status {
+  min-height: 3em;
+  margin-top: 1.5rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--fg-3);
+}
+
+/* The ladder renders the same turn the phone does, so the .cbub card is the
+   only surface it needs. The panel around it stays bare. */
+.fb-answer {
+  margin-top: 0.75rem;
+  font-family: var(--wp-sans);
+}
+.fb-answer .dm-bub { animation: none; }
+.fb-answer .dm-turn:last-child { margin-bottom: 0; }
+
+@media (max-width: 900px) {
+  .fb { grid-template-columns: minmax(0, 1fr); }
+  .fb-status { min-height: 0; }
+}
+
+/* ------------------------------------------- the data boundary env switch */
+
+.bsw { margin-top: var(--stack); }
+.bsw-tabs {
+  display: inline-flex;
+  gap: 1px;
+  margin-top: 0.75rem;
+  padding: 2px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+.bsw-tabs button {
+  padding: 0.4rem 1.1rem;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--fg-3);
+  cursor: pointer;
+  transition: background 0.18s var(--ease), color 0.18s var(--ease);
+}
+.bsw-tabs button:hover { color: var(--fg); }
+.bsw-tabs button[aria-pressed="true"] {
+  background: var(--accent);
+  color: #F3F2EE;
+}
+.bsw-note {
+  max-width: 46em;
+  min-height: 1.4em;
+  margin-top: 0.9rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--fg-2);
+}
+
+/* the column that is not running dims, so the live one is unmistakable */
+#boundary .vs > div { transition: opacity 0.25s var(--ease); }
+#boundary:not(.is-model) .vs > div:last-child,
+#boundary.is-model .vs > div:first-child { opacity: 0.42; }
+
+@media (max-width: 640px) {
+  .fb-q, .fb-rung { min-height: 44px; }
+  .bsw-tabs button { min-height: 40px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #boundary .vs > div,
+  .ht-list button, .fb-q, .fb-rung, .bsw-tabs button { transition: none; }
+}
+
+/* =========================================================================
+   Navigation, as a floating overlay.
+
+   This page takes the section index off the left margin and puts it in the
+   top bar, which becomes a glass pill centred at the top. Everything here is
+   an OVERRIDE of the shared block above, which stays byte-identical so the
+   Wellness Store and Generative EMR pages keep the side rail they have.
+   ========================================================================= */
+
+.topbar {
+  inset: 0.85rem auto auto 50%;
+  transform: translateX(-50%);
+  width: min(max-content, calc(100vw - 1.5rem));
+  min-width: 0;
+  height: auto;
+  gap: 0.6rem;
+  padding: 0.35rem 0.35rem 0.35rem 1.05rem;
+  border-radius: 999px;
+}
+
+/* the pill's own glass, on at the top of the page as well */
+.topbar::before {
+  border-radius: inherit;
+  background: rgba(243, 242, 238, 0.58);
+  -webkit-backdrop-filter: saturate(1.7) blur(20px);
+  backdrop-filter: saturate(1.7) blur(20px);
+  box-shadow:
+    inset 0 0 0 1px rgba(16, 17, 20, 0.10),
+    0 16px 40px -30px rgba(11, 14, 20, 0.45);
+}
+/* lifted off the night ground rather than matched to it, or the pill reads as
+   a hole in the page instead of a surface over it */
+.topbar[data-tone="dark"]::before {
+  background: rgba(26, 32, 42, 0.62);
+  box-shadow:
+    inset 0 0 0 1px rgba(243, 242, 238, 0.16),
+    0 16px 40px -30px rgba(0, 0, 0, 0.6);
+}
+.topbar.at-top::before { opacity: 1; }
+
+.tb-mark { font-size: 0.9375rem; white-space: nowrap; }
+
+/* Scroll progress, as a ring at the right end of the pill rather than a
+   hairline under it. script.js already writes --p (0 to 1, whole document)
+   onto .tb-progress span for the shared hairline, so this is a restyle of
+   the same element and the shared script is untouched. A conic-gradient
+   filled clockwise, masked in the middle to leave a ring. */
+/* --p is registered so it has a type; it inherits, because script.js writes
+   it on .tb-progress span and the svg inside reads it. */
+@property --p {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+/* Scroll progress, as a ring at the right end of the pill rather than a
+   hairline under it. script.js already writes --p (0 to 1, whole document)
+   onto .tb-progress span for the shared hairline, so the script is untouched.
+   Drawn as an SVG arc: conic-gradient with calc(var()) in a colour stop
+   computes correctly and paints nothing in Chrome, which cost an hour. */
+.tb-progress {
+  position: static;
+  flex: none;
+  width: 1.4rem;
+  height: 1.4rem;
+  margin-right: 0.3rem;
+  background: none;
+  border-radius: 0;
+  overflow: visible;
+}
+.tb-progress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: none;
+  transform: none;              /* the shared rule scales this one on X */
+}
+.tb-progress svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);    /* start the arc at twelve o'clock */
+  overflow: visible;
+}
+.tb-progress circle {
+  fill: none;
+  stroke-width: 2.4;
+}
+.tb-trk { stroke: currentColor; opacity: 0.22; }
+.tb-arc {
+  stroke: currentColor;
+  stroke-linecap: round;
+  /* 2 * pi * r, r = 10 */
+  stroke-dasharray: 62.832;
+  stroke-dashoffset: calc(62.832px * (1 - var(--p, 0)));
+  transition: stroke-dashoffset 0.2s linear;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tb-arc { transition: none; }
+}
+
+}
+
+/* ---- the section index, now a row inside the pill ---- */
+
+/* The shared block only styles .rail a from 1180px up, because that is the
+   only width its side rail existed at. The pill shows the row from 780px, so
+   between those two the links fell back to the UA stylesheet and rendered
+   blue and underlined. Both pages were affected. Unconditional, and outside
+   any query, so it holds at every width the row can appear at. */
+.rail a { color: inherit; text-decoration: none; }
+.r-num {
+  font-family: var(--mono);
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* script.js adds .on to the rail once the hero is mostly out of view. That
+   was the cue for the old side rail to slide in from the left margin, and it
+   carries transform: translate(0, -50%). In the pill the rail is an ordinary
+   flex item, so that transform yanked the whole row up by half its height the
+   moment you scrolled past the hero — the nav looked correct at the top of the
+   page and broken everywhere else. .rail.on is specificity 0,2,0, so the plain
+   .rail override below could never win; this has to match it. Unscoped, because
+   detailed.html has the same rail in the same pill. */
+.rail.on {
+  position: static;
+  transform: none;
+  opacity: 1;
+  visibility: visible;
+  mix-blend-mode: normal;
+}
+
+.rail {
+  display: none;              /* the Index button carries it on narrow screens */
+  position: static;
+  width: auto;
+  color: inherit;
+  mix-blend-mode: normal;
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: none;
+}
+
+@media (min-width: 1024px) {
+  :root { --rail: 0px; }      /* the left margin the old rail reserved comes back */
+
+  .rail { display: flex; align-items: center; min-width: 0; }
+  /* the shared rail is a vertical list, so its own list metrics come off */
+  .rail ol {
+    display: flex;
+    align-items: center;
+    gap: 0.1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    /* a long index scrolls inside the pill rather than widening the page */
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .rail ol::-webkit-scrollbar { display: none; }
+  .rail li { flex: none; }
+  .rail li { margin: 0; padding: 0; flex: none; }
+
+  /* A number is always shown; the name unfurls for the section you are in,
+     and for whichever one you point at. Ten names at once would not fit a
+     pill, and ten bare numbers would be a riddle. */
+  .rail a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.42rem 0.6rem;
+    border-radius: 999px;
+    opacity: 0.5;
+    text-decoration: none;
+    transition: opacity 0.2s ease, background-color 0.2s ease;
+  }
+  .rail a::after { display: none; }
+  .rail a:hover, .rail a:focus-visible { opacity: 1; }
+  .rail a[aria-current="true"] {
+    opacity: 1;
+    background: color-mix(in srgb, currentColor 12%, transparent);
+  }
+
+  .r-num { font-size: 0.66rem; opacity: 0.85; }
+  .r-name {
+    max-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    opacity: 0;
+    font-size: 0.76rem;
+    letter-spacing: -0.005em;
+    transition: max-width 0.4s var(--ease), opacity 0.25s ease;
+  }
+  .rail a[aria-current="true"] .r-name,
+  .rail a:hover .r-name,
+  .rail a:focus-visible .r-name { max-width: 11rem; opacity: 1; }
+
+  /* the row is the index at this width */
+  .tb-index { display: none; }
+}
+
+/* the shared block hands the rail over at 1180px; this page does it at 1024 */
+@media (min-width: 1024px) and (max-width: 1179.98px) {
+  .tb-index { display: none; }
+}
+
+/* ---- the index panel, as the overlay it now visually belongs to ---- */
+
+.index-panel {
+  top: calc(var(--topbar) + 0.9rem);
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+  width: min(24rem, calc(100vw - 1.5rem));
+  padding: 0.45rem;
+  border: 0;
+  border-radius: 20px;
+  background: rgba(11, 14, 20, 0.6);
+  -webkit-backdrop-filter: saturate(1.7) blur(24px);
+  backdrop-filter: saturate(1.7) blur(24px);
+  box-shadow:
+    inset 0 0 0 1px rgba(243, 242, 238, 0.14),
+    0 30px 60px -24px rgba(0, 0, 0, 0.75);
+}
+.index-panel a { color: var(--n-ink); border-radius: 12px; }
+.index-panel a span { color: var(--n-ink-3); }
+.index-panel a:hover,
+.index-panel a[aria-current="true"] { background: rgba(243, 242, 238, 0.1); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .index-panel:not([hidden]) { animation: panel-in 0.3s var(--ease); }
+}
+@keyframes panel-in {
+  from { opacity: 0; transform: translate(-50%, -6px) scale(0.98); }
+  to   { opacity: 1; transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rail a, .r-name { transition: none; }
+}
+
+/* the pill is a fixed object now, so the hero starts below it */
+.hero { padding-top: calc(var(--topbar) + clamp(3rem, 9vh, 7rem)); }
+
+
+/* ==== The short page: a nav that sheds parts instead of breaking ========
+   Six sections means the names can be shown outright, which is the point.
+   But "show them or hide the whole row" is a cliff: at 1023px the pill went
+   to a mark and an Index button with a third of the width empty, and in the
+   band just above it the names had to scroll inside their own pill.
+
+   So the row sheds what it can spare, in this order:
+     >= 1180   numbers and names, generous
+     900-1180  names only, the numbers are decoration next to a word
+     780-900   names only, one step smaller
+     < 780     the Index button and the panel, as before
+   Scoped to the header attribute rather than .rail, because .tb-index is a
+   sibling of the rail and has to move with it. detailed.html has no
+   data-nav, so it keeps the ten-number row and its unfurl-on-active. */
+
+/* --- names only, from 780px up --- */
+@media (min-width: 780px) {
+  .topbar[data-nav="named"] .rail { display: flex; align-items: center; min-width: 0; }
+  .topbar[data-nav="named"] .tb-index { display: none; }
+  .topbar[data-nav="named"] .r-num { display: none; }
+
+  .topbar[data-nav="named"] .rail ol {
+    display: flex;
+    align-items: center;
+    gap: 0.05rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    flex-wrap: nowrap;
+    overflow-x: auto;          /* never fires at these sizes; a font that
+                                  loads wider clips rather than widening */
+    scrollbar-width: none;
+  }
+  .topbar[data-nav="named"] .rail li { flex: none; margin: 0; padding: 0; }
+
+  .topbar[data-nav="named"] .rail a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    padding: 0.42rem 0.42rem;
+    border-radius: 999px;
+    opacity: 1;
+    text-decoration: none;
+  }
+  .topbar[data-nav="named"] .r-name {
+    max-width: none;
+    margin: 0;
+    opacity: 0.52;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    transition: opacity 0.2s ease;
+  }
+  .topbar[data-nav="named"] .rail a:hover .r-name,
+  .topbar[data-nav="named"] .rail a:focus-visible .r-name,
+  .topbar[data-nav="named"] .rail a[aria-current="true"] .r-name { opacity: 1; }
+}
+
+/* --- a little more room --- */
+@media (min-width: 900px) {
+  .topbar[data-nav="named"] .rail a { padding: 0.42rem 0.55rem; }
+  .topbar[data-nav="named"] .rail ol { gap: 0.1rem; }
+  .topbar[data-nav="named"] .r-name { font-size: 0.74rem; }
+}
+
+/* --- room for the numbers too --- */
+@media (min-width: 1180px) {
+  .topbar[data-nav="named"] .r-num {
+    display: inline;
+    font-size: 0.66rem;
+    opacity: 0.38;
+    transition: opacity 0.2s ease;
+  }
+  .topbar[data-nav="named"] .rail a {
+    gap: 0.42rem;
+    padding: 0.42rem 0.62rem;
+  }
+  .topbar[data-nav="named"] .r-name { font-size: 0.76rem; }
+  .topbar[data-nav="named"] .rail a:hover .r-num,
+  .topbar[data-nav="named"] .rail a[aria-current="true"] .r-num { opacity: 1; }
+}
+
+/* The mark and the links sit in correctly centred boxes, but they were not
+   optically aligned: the mark carries line-height 24px on a 15px face while a
+   name carries 15.2px on 12.16px. Different half-leading puts the glyphs at
+   different heights inside boxes whose centres already agree, which reads as
+   the brand sitting a line below the nav. One ratio for both, and no
+   asymmetric padding on the mark, puts the glyphs on a common centre. */
+@media (min-width: 780px) {
+  .topbar[data-nav="named"] { align-items: center; }
+  .topbar[data-nav="named"] .tb-mark { padding-block: 0; line-height: 1.15; }
+  .topbar[data-nav="named"] .rail a { line-height: 1.15; }
+  .topbar[data-nav="named"] .r-name,
+  .topbar[data-nav="named"] .r-num { line-height: 1.15; }
+}
+
+/* the active section gets the pill-within-a-pill at every tier */
+@media (min-width: 780px) {
+  .topbar[data-nav="named"] .rail a[aria-current="true"] {
+    background: color-mix(in srgb, currentColor 12%, transparent);
+  }
+  .topbar[data-nav="named"] .rail a:hover {
+    background: color-mix(in srgb, currentColor 7%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .topbar[data-nav="named"] .r-name,
+  .topbar[data-nav="named"] .r-num { transition: none; }
+}
+
+/* Inline links in body copy. The shared block never styled one, because
+   until now no section linked anywhere: .ht-key a was the only content link
+   on the page. The links out to detailed.html were rendering as the browser
+   default, blue and underlined. Matches .ht-key a, both tones. */
+.prose a,
+.aside a,
+.pull a,
+.caveat a,
+.path p a,
+.rules p a,
+.dia-key a,
+.tr-foot a,
+.tr-note a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent-edge);
+  transition: border-color 0.25s ease, color 0.25s ease;
+}
+.dark .prose a,
+.dark .aside a,
+.dark .pull a,
+.dark .caveat a,
+.dark .path p a,
+.dark .rules p a,
+.dark .dia-key a,
+.dark .tr-foot a { color: var(--accent-night); }
+
+.prose a:hover,
+.aside a:hover,
+.pull a:hover,
+.caveat a:hover,
+.path p a:hover,
+.rules p a:hover,
+.dia-key a:hover,
+.tr-foot a:hover { border-bottom-color: currentColor; }
+
+/* the five layers, one row each: the names of the real files stay, the
+   per-file paragraphs go. This section was twice the height of every other
+   one and the layer list was the single biggest block in it. */
+.lay { margin-top: var(--stack); padding: 0; list-style: none; counter-reset: ly; }
+.lay > li {
+  display: grid;
+  grid-template-columns: 2.4rem minmax(0, 11rem) minmax(0, 1.9fr);
+  gap: clamp(0.6rem, 2vw, 1.75rem);
+  align-items: baseline;
+  padding-block: 1.05rem;
+  border-top: 1px solid var(--line);
+}
+.lay > li:last-child { border-bottom: 1px solid var(--line); }
+.lay > li::before {
+  counter-increment: ly;
+  content: counter(ly, decimal-leading-zero);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--fg-3);
+}
+.ly-n {
+  font-family: var(--display);
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  font-weight: 560;
+  letter-spacing: -0.015em;
+  color: var(--fg);
+}
+.ly-d {
+  margin-top: 0.25rem;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--fg-3);
+}
+.ly-f {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--fg-2);
+}
+.ly-f b {
+  font-family: var(--mono);
+  font-size: 0.82em;
+  font-weight: 400;
+  color: var(--fg);
+}
+.lay > li.is-model .ly-n { color: var(--accent); }
+.dark .lay > li.is-model .ly-n { color: var(--accent-night); }
+
+@media (max-width: 800px) {
+  .lay > li { grid-template-columns: 2.2rem minmax(0, 1fr); }
+  .lay > li > .ly-f { grid-column: 2; margin-top: 0.6rem; }
+}
+
+/* "What someone types": pick a sentence, and one panel shows where the
+   catalogue keeps that subject and the words it actually searches for.
+   The selected chip uses the page's accent tokens (--accent-soft and
+   --accent-edge exist for exactly this); an earlier version made it a solid
+   black pill, which was a second selection language on the same page. */
+.ask { margin-top: 1.25rem; }
+
+.ask-picks { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.ask-p {
+  padding: 0.65rem 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fg-2);
+  font-family: var(--display);
+  font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: color 0.2s var(--ease), border-color 0.2s var(--ease),
+              background-color 0.2s var(--ease);
+}
+.ask-p:hover { color: var(--fg); border-color: var(--fg-3); }
+.ask-p[aria-pressed="true"] {
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-color: var(--accent-edge);
+}
+.dark .ask-p[aria-pressed="true"] {
+  color: var(--accent-night);
+  background: color-mix(in srgb, var(--accent-night) 12%, transparent);
+  border-color: color-mix(in srgb, var(--accent-night) 40%, transparent);
+}
+
+/* the answer, as one object rather than a loose line */
+.ask-card {
+  margin-top: 1.5rem;
+  padding: clamp(1.4rem, 3vw, 2rem);
+  border: 1px solid var(--accent-edge);
+  border-radius: 16px;
+  background: var(--accent-soft);
+}
+.dark .ask-card {
+  border-color: color-mix(in srgb, var(--accent-night) 26%, transparent);
+  background: color-mix(in srgb, var(--accent-night) 7%, transparent);
+}
+
+.ask-said {
+  font-family: var(--display);
+  font-size: clamp(1.35rem, 3vw, 2.1rem);
+  font-weight: 560;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  color: var(--fg);
+}
+
+.ask-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  margin-top: clamp(1.25rem, 2.5vw, 1.75rem);
+  padding-top: clamp(1.1rem, 2.5vw, 1.5rem);
+  border-top: 1px solid var(--accent-edge);
+}
+.dark .ask-grid { border-top-color: color-mix(in srgb, var(--accent-night) 24%, transparent); }
+
+.ask-k {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+.ask-cat {
+  margin-top: 0.5rem;
+  font-family: var(--display);
+  font-size: clamp(1.05rem, 2vw, 1.4rem);
+  font-weight: 540;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  color: var(--fg);
+}
+.ask-w { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.55rem; }
+.ask-w span {
+  padding: 0.3rem 0.65rem;
+  border: 1px solid var(--accent-edge);
+  border-radius: 999px;
+  background: var(--bg);
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  color: var(--accent);
+}
+.dark .ask-w span {
+  border-color: color-mix(in srgb, var(--accent-night) 34%, transparent);
+  background: transparent;
+  color: var(--accent-night);
+}
+
+@media (max-width: 640px) {
+  .ask-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ---- the way out to the long version ---- */
+.go {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-top: 0.4rem;
+  padding: 0.7rem 1.15rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-family: var(--display);
+  font-size: 0.95rem;
+  font-weight: 520;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.3s var(--ease), color 0.3s var(--ease);
+}
+.go span { transition: transform 0.3s var(--ease); }
+.go:hover span { transform: translateX(0.2rem); }
+.dark .go:hover { background: var(--fg); color: var(--bg); }
+.go:hover { background: var(--fg); color: var(--bg); }
