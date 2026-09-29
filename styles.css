@@ -2771,3 +2771,86 @@ button.dm-row { cursor: pointer; }
 .go:hover span { transform: translateX(0.2rem); }
 .dark .go:hover { background: var(--fg); color: var(--bg); }
 .go:hover { background: var(--fg); color: var(--bg); }
+
+/* ------------------------------------------------ more, and the sign-off
+   Shared by every case study: the other case studies, the way back to the
+   portfolio, and a sign-off that matches the portfolio's own footer. */
+
+.more { margin-bottom: clamp(4rem, 8vw, 7rem); }
+.more-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--line);
+}
+.more-label {
+  font-family: var(--display);
+  font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  color: var(--fg);
+}
+.home-link, .sign-links a {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg);
+  text-decoration: none;
+}
+.home-link:hover, .sign-links a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.more-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  margin-top: clamp(1.5rem, 3vw, 2.25rem);
+}
+.more-card { display: grid; gap: 0.5rem; color: inherit; text-decoration: none; }
+.more-img {
+  display: block;
+  overflow: hidden;
+  margin-bottom: 0.6rem;
+  border-radius: var(--radius);
+  box-shadow: 0 0 0 1px var(--line);
+}
+.more-img img { display: block; width: 100%; height: auto; transition: transform 0.7s var(--ease); }
+.more-card:hover .more-img img { transform: scale(1.03); }
+.more-meta { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fg-3); }
+.more-title {
+  font-family: var(--display);
+  font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: var(--fg);
+}
+.more-title span { display: inline-block; transition: transform 0.3s var(--ease); }
+.more-card:hover .more-title span { transform: translateX(4px); }
+.more-sum { max-width: 30em; font-size: 0.95rem; color: var(--fg-2); }
+
+.sign {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1rem 2rem;
+  align-items: center;
+  margin-top: clamp(2rem, 4vw, 3rem);
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+.sign-me { display: inline-flex; align-items: center; gap: 0.85rem; color: inherit; text-decoration: none; }
+.sign-avatar { width: 2.75rem; height: 2.75rem; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 1px var(--line); }
+.sign-me b { display: block; font-weight: 560; font-size: 0.98rem; color: var(--fg); }
+.sign-me small { display: block; margin-top: 0.1rem; font-size: 0.82rem; color: var(--fg-3); }
+.sign-links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; justify-self: center; }
+.sign-copy { font-size: 0.8rem; color: var(--fg-3); }
+
+@media (max-width: 760px) {
+  .more-grid { grid-template-columns: 1fr; }
+  .sign { grid-template-columns: 1fr; }
+  .sign-links { justify-self: start; }
+  .home-link, .sign-links a { display: inline-block; padding-block: 0.6rem; margin-block: -0.6rem; }
+}
