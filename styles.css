@@ -2907,3 +2907,24 @@ button.dm-row { cursor: pointer; }
 .topbar { width: max-content; max-width: calc(100vw - 1.5rem); }
 .topbar .tb-mark { flex: none; }
 .topbar .rail .r-num { display: none !important; }
+
+/* ------------------------------------------- the compact pill, everywhere
+   Every section named in one strip was too much: crowded, and cut off at the
+   edges. The pill is now three things on every screen: the way home, the
+   case study's name, and the section you are in, which opens the full index
+   of sections as the glass panel below it. */
+.topbar .rail { display: none !important; }
+.topbar .tb-index { display: inline-flex !important; }
+.topbar { gap: 0.6rem; padding: 0.35rem; }
+.topbar .tb-mark { padding-inline: 0.35rem 0.1rem; }
+.tb-home,
+.tb-index { min-height: 2.35rem; padding: 0.45rem 1rem; }
+.tb-index {
+  gap: 0.55rem;
+  font-family: var(--sans);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.tb-num { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.04em; }
