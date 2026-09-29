@@ -2854,3 +2854,56 @@ button.dm-row { cursor: pointer; }
   .sign-links { justify-self: start; }
   .home-link, .sign-links a { display: inline-block; padding-block: 0.6rem; margin-block: -0.6rem; }
 }
+
+/* ------------------------------------ return to home, and every section named
+   The way back to the portfolio is the one solid object in the top pill, and
+   the footer's link matches it. The row names every section rather than
+   numbering them; when the names outgrow the pill the row scrolls, fading at
+   its edges, and the script keeps the current section in view. */
+.tb-home,
+.home-link {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 0.8125rem;
+  font-weight: 560;
+  letter-spacing: 0;
+  text-transform: none;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 0.2s var(--ease), opacity 0.2s ease;
+}
+.topbar[data-tone="dark"] .tb-home,
+.dark .home-link,
+.end.dark .home-link { background: var(--paper); color: var(--ink); }
+.tb-home:hover, .home-link:hover { text-decoration: none; transform: translateX(-2px); }
+.tb-home span, .home-link span { transition: transform 0.2s var(--ease); }
+.topbar { padding-left: 0.35rem; }
+
+.rail .r-num { display: none; }
+.rail .r-name { max-width: none !important; opacity: 1 !important; }
+.rail ol {
+  position: relative;
+  scroll-behavior: smooth;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 1.25rem, #000 calc(100% - 1.25rem), transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 1.25rem, #000 calc(100% - 1.25rem), transparent);
+  padding-inline: 0.5rem !important;
+}
+@media (prefers-reduced-motion: reduce) { .rail ol { scroll-behavior: auto; } }
+
+/* phones: the way home and the index are what fit */
+@media (max-width: 560px) {
+  .topbar .tb-mark { display: none; }
+  .tb-home { padding: 0.5rem 0.85rem; }
+}
+.home-link { margin-block: 0 !important; }
+/* min(max-content, ...) is not valid CSS, so the pill never capped; cap it properly */
+.topbar { width: max-content; max-width: calc(100vw - 1.5rem); }
+.topbar .tb-mark { flex: none; }
+.topbar .rail .r-num { display: none !important; }

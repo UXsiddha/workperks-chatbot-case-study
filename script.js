@@ -256,3 +256,16 @@
     });
   }, 2500);
 })();
+
+
+/* ---- keep the section you are in visible in the top pill's row ---------- */
+(function () {
+  var ol = document.querySelector('.rail ol');
+  if (!ol || !('MutationObserver' in window)) return;
+  new MutationObserver(function () {
+    var a = ol.querySelector('a[aria-current="true"]');
+    if (!a || ol.scrollWidth <= ol.clientWidth) return;
+    var li = a.parentElement;
+    ol.scrollLeft = Math.max(0, li.offsetLeft - (ol.clientWidth - li.offsetWidth) / 2);
+  }).observe(ol, { subtree: true, attributes: true, attributeFilter: ['aria-current'] });
+})();
