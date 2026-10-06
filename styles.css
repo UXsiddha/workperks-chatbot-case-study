@@ -39,9 +39,9 @@
   --bleed:    1680px;
   --gutter:   clamp(1rem, 4vw, 3rem);
   --prose:    40rem;
-  --section:  clamp(5.5rem, 11vw, 10.5rem);
+  --section:  clamp(4rem, 7.5vw, 7rem);      /* was clamp(5.5rem, 11vw, 10.5rem): 317px between sections read as empty */
   --stack:    clamp(2.5rem, 5vw, 4.5rem);
-  --stack-lg: clamp(3.5rem, 8vw, 7rem);
+  --stack-lg: clamp(3rem, 6vw, 5rem);        /* was clamp(3.5rem, 8vw, 7rem) */
   --topbar:   3.75rem;
   --rail:     0px;      /* the side rail's reserved margin; set from 1180px */
   --radius:   clamp(8px, 1vw, 14px);
@@ -1600,7 +1600,8 @@ code, .mono {
 
 /* ---- the app's own tokens, scoped to the replica ---- */
 .dm-frame,
-.fb-answer {
+.fb-answer,
+.rp-out {
   --wp-ink:      #141414;
   --wp-ink2:     #4A4A48;
   --wp-soft:     #6E6A64;
@@ -2928,3 +2929,621 @@ button.dm-row { cursor: pointer; }
   text-transform: none;
 }
 .tb-num { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.04em; }
+
+/* ============================================================
+   The hover grid from the Framer splash, behind the before and
+   after sections only. Drawn by kinetic-grid.js; the canvas sits
+   under the section's content and never takes pointer input.
+   ============================================================ */
+.has-kgrid { position: relative; isolation: isolate; }
+/* every section: a screen-tall canvas that sticks while its section scrolls
+   past (kinetic-grid.js adds the wrapper). overflow: clip, not hidden, so the
+   wrapper does not become the sticky element's scroll container. */
+.kgrid-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: clip;
+  pointer-events: none;
+}
+.kgrid {
+  position: sticky;
+  top: 0;
+  display: block;
+  width: 100%;
+  height: 100vh;
+  max-height: 100%;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* ---- layout fix (2026-09-30): paired phone screens ran 1282px tall at 1440
+   wide. The pair keeps its left-aligned two columns, sized to ~20rem phones. */
+@media (min-width: 900px) {
+  .phones.two { max-width: calc(40rem + 2.5rem); }
+  .phone.gif { max-width: 20rem; }
+}
+
+/* a label directly above a phone pair sits close to it, like every other label */
+.wrap > .label + .phones { margin-top: clamp(1rem, 2vw, 1.5rem); }
+
+
+/* =========================================================================
+   2026-10-03 redesign: the product design case study.
+   Chatbot-only components, appended so the block shared with the other two
+   case studies stays byte-identical. Editorial, flat, one accent: teal
+   marks the one place a model acts.
+   ========================================================================= */
+
+/* a question in place of a number ("The product") */
+.stat-q {
+  font-family: var(--display);
+  font-size: clamp(1.6rem, 2.6vw, 2.25rem);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--fg);
+  margin-bottom: 0.9rem;
+}
+.stats.three { margin-top: var(--stack); }
+
+/* the accent, per ground */
+:root { --acc: var(--accent); --acc-soft: var(--accent-soft); --acc-edge: var(--accent-edge); }
+.dark { --acc: var(--accent-night); --acc-soft: rgba(95, 195, 175, 0.1); --acc-edge: rgba(95, 195, 175, 0.32); }
+
+/* ---- the chain: intent to action, in six steps ---- */
+.chain {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0;
+  margin-top: clamp(1rem, 2vw, 1.5rem);
+  counter-reset: ch;
+}
+.chain > li {
+  position: relative;
+  padding: 1rem 1.1rem 1.1rem 0;
+  border-top: 2px solid var(--line);
+}
+.chain > li + li { padding-left: 1.1rem; border-left: 1px solid var(--line); }
+.chain > li::after {
+  /* the arrow into the next step */
+  content: "";
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 10px; height: 10px;
+  border-top: 2px solid var(--fg-3);
+  border-right: 2px solid var(--fg-3);
+  transform: rotate(45deg);
+  background: transparent;
+}
+.chain > li:last-child::after { display: none; }
+.chain .ch-k, .rp-steps .ch-k {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+.chain b {
+  display: block;
+  margin-top: 0.45rem;
+  font-family: var(--display);
+  font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+  font-weight: 560;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--fg);
+}
+.chain span { display: block; margin-top: 0.4rem; font-size: 0.9rem; line-height: 1.45; color: var(--fg-2); }
+.chain > li.is-model { border-top-color: var(--acc); background: var(--acc-soft); }
+.chain > li.is-model b, .chain > li.is-model .ch-k { color: var(--acc); }
+
+/* compact, in the hero */
+.hero-chain { margin-top: clamp(2.5rem, 5vw, 4rem); }
+.chain.is-compact > li { padding-block: 0.8rem 0.9rem; }
+.chain.is-compact b { margin-top: 0; font-size: clamp(1rem, 1.3vw, 1.15rem); }
+.chain.is-compact span { font-size: 0.82rem; }
+
+@media (max-width: 900px) {
+  .chain { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 1rem; }
+  .chain > li:nth-child(3n+1) { padding-left: 0; border-left: 0; }
+  .chain > li:nth-child(3)::after { display: none; }
+}
+@media (max-width: 560px) {
+  .chain { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .chain > li:nth-child(3n+1) { padding-left: 1.1rem; border-left: 1px solid var(--line); }
+  .chain > li:nth-child(2n+1) { padding-left: 0; border-left: 0; }
+  .chain > li:nth-child(3)::after { display: block; }
+  .chain > li:nth-child(2n)::after { display: none; }
+}
+
+/* ---- 01: the employee's mental model against the taxonomy ---- */
+.mm {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 5rem minmax(0, 1.25fr);
+  gap: 0 clamp(0.75rem, 2vw, 1.5rem);
+  align-items: start;
+}
+.mm-side { padding-top: 1rem; border-top: 1px solid var(--fg); }
+.mm-k {
+  margin-bottom: 1rem;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+.mm .ask-picks { flex-direction: column; align-items: flex-start; }
+.mm-gap {
+  align-self: stretch;
+  display: grid;
+  place-items: center;
+  margin-top: 2.75rem;
+  border-inline: 1px dashed var(--line);
+}
+.mm-gap span {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+.mm-cats { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.mm-cats li {
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 0.86rem;
+  color: var(--fg-3);
+  transition: color 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
+}
+.mm-cats li.is-on { color: var(--acc); border-color: var(--acc-edge); background: var(--acc-soft); }
+.mm .ask-card { grid-column: 1 / -1; margin-top: 1.5rem; }
+@media (max-width: 760px) {
+  .mm { grid-template-columns: minmax(0, 1fr); row-gap: 1.25rem; }
+  .mm .ask-picks { flex-direction: row; }
+  .mm-gap { display: none; }
+}
+
+/* ---- the design challenge ---- */
+.hmw {
+  margin-top: var(--stack-lg);
+  padding: clamp(1.5rem, 3vw, 2.5rem) 0 0;
+  border-top: 2px solid var(--fg);
+}
+.hmw-q {
+  margin-top: 1rem;
+  max-width: 22em;
+  font-family: var(--display);
+  font-size: clamp(1.7rem, 3.4vw, 3rem);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: var(--fg);
+  text-wrap: balance;
+}
+
+/* ---- 02: the capability map ---- */
+.cap {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.75rem);
+  margin-top: clamp(1rem, 2vw, 1.5rem);
+}
+.cap > li { padding-top: 1rem; border-top: 1px solid var(--line); }
+.cap-n {
+  font-family: var(--display);
+  font-size: clamp(2.25rem, 3.6vw, 3.25rem);
+  font-weight: 500;
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  color: var(--fg-3);
+}
+.cap h3 {
+  margin-top: 1rem;
+  font-family: var(--display);
+  font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+  font-weight: 560;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--fg);
+}
+.cap h3 + p { margin-top: 0.5rem; font-size: 0.92rem; line-height: 1.45; color: var(--fg-2); }
+.cap-t {
+  margin-top: 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  line-height: 1.6;
+  color: var(--fg-3);
+  overflow-wrap: anywhere;
+}
+@media (max-width: 1080px) { .cap { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 2rem; } }
+@media (max-width: 640px)  { .cap { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 420px)  { .cap { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---- 03: the paired phone and its argument ---- */
+#behaviour .gif-row {
+  display: grid;
+  grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+  margin-top: var(--stack-lg);
+}
+#behaviour .gif-row .prose p + p { margin-top: 1.25rem; }
+@media (max-width: 760px) { #behaviour .gif-row { grid-template-columns: minmax(0, 1fr); } #behaviour .gif-row .phone { max-width: 18rem; } }
+
+/* ---- 04: the two kinds of no, quoted as the app says them ---- */
+.say {
+  margin-top: 1rem;
+  padding: 0.9rem 1.1rem;
+  border-left: 2px solid var(--acc);
+  background: var(--acc-soft);
+  font-size: 0.98rem;
+  line-height: 1.5;
+  color: var(--fg);
+}
+.say-act {
+  margin-top: 0.6rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: var(--acc);
+}
+.no2-why { margin-top: 1rem; font-size: 0.94rem; line-height: 1.5; color: var(--fg-2); }
+.no2 .label { text-transform: none; letter-spacing: 0.01em; font-size: 0.8rem; }
+
+.fail {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3vw, 2.5rem) clamp(1rem, 2.5vw, 2rem);
+  margin-top: clamp(1rem, 2vw, 1.5rem);
+}
+.fail > li { padding-top: 1rem; border-top: 1px solid var(--line); }
+.fail h3 {
+  font-family: var(--display);
+  font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+  font-weight: 560;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--fg);
+}
+.fail .say { margin-top: 0.75rem; padding: 0.7rem 0.9rem; font-size: 0.9rem; }
+.fail-next { margin-top: 0.75rem; font-size: 0.9rem; line-height: 1.5; color: var(--fg-2); }
+.fail-next::before { content: "Next step \2192  "; font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fg-3); }
+#failure .phones { margin-top: var(--stack-lg); }
+@media (max-width: 1000px) { .fail { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px)  { .fail { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---- 06: assumption, observation, risk, decision ---- */
+.disc {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 4vw, 3.5rem);
+  margin-top: var(--stack);
+}
+.disc > li { padding-top: 1.1rem; border-top: 2px solid var(--fg); }
+.disc h3 {
+  font-family: var(--display);
+  font-size: clamp(1.2rem, 1.9vw, 1.6rem);
+  font-weight: 560;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+  text-wrap: balance;
+}
+.disc dl {
+  display: grid;
+  grid-template-columns: 8.5rem minmax(0, 1fr);
+  gap: 0.55rem 1rem;
+  margin-top: 1rem;
+}
+.disc dt {
+  padding-top: 0.2rem;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+.disc dd { margin: 0; font-size: 0.94rem; line-height: 1.45; color: var(--fg-2); }
+.disc dt.is-dec { color: var(--acc); }
+.disc dt.is-dec + dd { color: var(--fg); font-weight: 500; }
+#discoveries .phones { margin-top: var(--stack-lg); }
+@media (max-width: 860px) { .disc { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 420px) { .disc dl { grid-template-columns: minmax(0, 1fr); gap: 0.2rem; } .disc dd { margin-bottom: 0.5rem; } }
+
+/* ---- 07: the validation loop and what each number means ---- */
+.loop {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin-top: clamp(1rem, 2vw, 1.5rem);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.loop > li { position: relative; padding: 1rem 1.1rem 1.1rem; }
+.loop > li + li { border-left: 1px solid var(--line); }
+.loop b {
+  display: block;
+  font-family: var(--display);
+  font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+  font-weight: 560;
+  color: var(--fg);
+}
+.loop span { display: block; margin-top: 0.35rem; font-size: 0.86rem; line-height: 1.45; color: var(--fg-2); }
+.loop > li:last-child b::after { content: " \21BA"; color: var(--fg-3); font-weight: 400; }
+@media (max-width: 900px) {
+  .loop { grid-template-columns: minmax(0, 1fr); }
+  .loop > li + li { border-left: 0; border-top: 1px solid var(--line); }
+}
+
+.metric {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(2.5rem, 5vw, 4rem) clamp(1.5rem, 4vw, 3.5rem);
+  margin-top: var(--stack-lg);
+}
+.metric > li { padding-top: 1.1rem; border-top: 2px solid var(--fg); }
+.m-num {
+  font-family: var(--display);
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 500;
+  line-height: 0.92;
+  letter-spacing: -0.05em;
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+}
+.m-num span { font-size: 0.42em; letter-spacing: -0.02em; color: var(--fg-3); }
+.m-num i { font-style: normal; font-family: var(--mono); font-size: 0.18em; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fg-3); vertical-align: middle; margin-inline: 0.4em; }
+.metric h3 {
+  margin-top: 1rem;
+  max-width: 22em;
+  font-family: var(--display);
+  font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+  font-weight: 560;
+  line-height: 1.2;
+  color: var(--fg);
+}
+.metric dl { margin-top: 0.9rem; }
+.metric dt {
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+.metric dd { margin: 0.3rem 0 0.75rem; font-size: 0.92rem; line-height: 1.5; color: var(--fg-2); }
+@media (max-width: 860px) { .metric { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---- 08: the replay, recorded routing over live tools ---- */
+.replay { margin-top: clamp(1rem, 2vw, 1.5rem); }
+.rp-picks { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.rp-p {
+  padding: 0.55rem 0.95rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fg-2);
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+.rp-p:hover { color: var(--fg); border-color: var(--fg-3); }
+.rp-p[aria-pressed="true"] { color: var(--acc); border-color: var(--acc-edge); background: var(--acc-soft); }
+.rp-steps {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 0.8fr) minmax(0, 1.6fr) minmax(0, 0.9fr);
+  margin-top: 1.5rem;
+  border-top: 2px solid var(--line);
+}
+.rp-steps > li { padding: 1rem 1.1rem 1.1rem 0; }
+.rp-steps > li + li { padding-left: 1.1rem; border-left: 1px solid var(--line); }
+.rp-steps b {
+  display: block;
+  margin-top: 0.45rem;
+  font-family: var(--display);
+  font-size: 1.15rem;
+  font-weight: 560;
+  color: var(--fg);
+}
+.rp-steps span { display: block; margin-top: 0.5rem; font-size: 0.95rem; line-height: 1.45; color: var(--fg); }
+.rp-steps > li.is-model { background: var(--acc-soft); box-shadow: inset 0 2px 0 var(--acc); }
+.rp-steps > li.is-model b, .rp-steps > li.is-model .ch-k { color: var(--acc); }
+.replay.is-miss .rp-steps > li.is-model { background: rgba(214, 120, 90, 0.12); box-shadow: inset 0 2px 0 #E0896A; }
+.replay.is-miss .rp-steps > li.is-model b,
+.replay.is-miss .rp-steps > li.is-model .ch-k { color: #E0896A; }
+.rp-out { margin-top: 0.75rem; font-family: var(--wp-sans); }
+.rp-out .dm-bub { animation: none; }
+.rp-out .dm-turn:last-child { margin-bottom: 0; }
+.rp-note { margin-top: 1rem; max-width: var(--prose); font-size: 0.9rem; line-height: 1.5; color: var(--fg-3); }
+#try .demo-stage { margin-top: clamp(1rem, 2vw, 1.5rem); }
+@media (max-width: 1000px) {
+  .rp-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rp-steps > li:nth-child(3) { grid-column: 1 / -1; order: 4; padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
+  .rp-steps > li:nth-child(4) { order: 3; }
+}
+@media (max-width: 560px) {
+  .rp-steps { grid-template-columns: minmax(0, 1fr); }
+  .rp-steps > li { padding-left: 0 !important; border-left: 0 !important; border-top: 1px solid var(--line); }
+  .rp-steps > li:nth-child(3) { order: 3; }
+  .rp-steps > li:nth-child(4) { order: 4; }
+}
+
+/* ---- 09: the takeaway ---- */
+.takeaway {
+  margin-top: var(--stack-lg);
+  padding-top: clamp(1.5rem, 3vw, 2.5rem);
+  border-top: 2px solid var(--fg);
+}
+.takeaway-q {
+  margin-top: 1rem;
+  max-width: 21em;
+  font-family: var(--display);
+  font-size: clamp(1.8rem, 3.6vw, 3.25rem);
+  font-weight: 500;
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+  color: var(--fg);
+  text-wrap: balance;
+}
+
+/* ---- detailed.html: the reading guide at the top of the deep dive ---- */
+.dd-guide {
+  margin-top: var(--stack);
+  padding: clamp(1.25rem, 2.5vw, 1.75rem) 0 0;
+  border-top: 1px solid var(--line);
+  max-width: 44rem;
+}
+.dd-guide > p:not(.label) { margin-top: 0.6rem; color: var(--fg-2); }
+.dd-guide a { color: var(--acc); text-decoration: underline; text-decoration-color: var(--acc-edge); text-underline-offset: 3px; }
+.dd-guide ul { margin-top: 0.9rem; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.35rem 1.5rem; }
+.dd-guide li { font-size: 0.94rem; color: var(--fg-2); }
+.dd-guide li a { font-family: var(--mono); font-size: 0.75rem; margin-right: 0.5rem; text-decoration: none; }
+@media (max-width: 640px) { .dd-guide ul { grid-template-columns: minmax(0, 1fr); } }
+
+/* the hero's ownership list reads as a sentence, so it gets two columns' width */
+@media (min-width: 1081px) {
+  .hero .meta { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .hero .meta .meta-wide { grid-column: span 2; }
+}
+
+
+/* ---- fixes, 2026-10-03 ---- */
+/* a pull quote inside a prose block keeps the pull colour */
+.prose .pull { color: var(--fg); }
+.prose .pull + p { margin-top: 1.25rem; }
+
+/* the demo starters are chips on the page: give them an edge you can see */
+.demo-notes .dm-starters .dm-chip {
+  border: 1px solid rgba(243, 242, 238, 0.28);
+  background: transparent;
+  color: var(--n-ink);
+}
+.demo-notes .dm-starters .dm-chip:hover { border-color: var(--accent-night); color: var(--accent-night); }
+
+/* the tape under the phone stays on one line */
+.dm-tape { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* the recorded step: an accent rule, not a tall tinted column */
+.rp-steps > li.is-model { background: none; box-shadow: inset 0 2px 0 var(--acc); }
+.replay.is-miss .rp-steps > li.is-model { background: none; }
+@media (max-width: 1180px) {
+  .rp-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rp-steps > li:nth-child(3) { grid-column: 1 / -1; order: 4; padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
+  .rp-steps > li:nth-child(4) { order: 3; }
+}
+@media (max-width: 560px) {
+  .rp-steps { grid-template-columns: minmax(0, 1fr); }
+  .rp-steps > li:nth-child(3) { order: 3; }
+  .rp-steps > li:nth-child(4) { order: 4; }
+}
+
+/* 06: the animation beside the finding it shows */
+.disc-row {
+  display: grid;
+  grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+  margin-top: var(--stack-lg);
+}
+@media (max-width: 760px) { .disc-row { grid-template-columns: minmax(0, 1fr); } .disc-row .phone { max-width: 18rem; } }
+
+/* =========================================================================
+   The hero, simplified (2026-10-06, Sathya: "keep the roles, then overview,
+   then a chatbot ui"): the role row across the full width, one overview
+   paragraph, then the phone on its own.
+   ========================================================================= */
+.hero-foot.is-simple { grid-template-columns: minmax(0, 1fr); }
+.hero-overview {
+  margin-top: clamp(2rem, 3.5vw, 3rem);
+  padding-top: clamp(1.25rem, 2vw, 1.5rem);
+  border-top: 1px solid var(--line);
+}
+.hero-overview .label {
+  margin: 0 0 1rem;
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  padding: 0.4rem 0.75rem 0.4rem 0.6rem;
+  border-radius: 999px;
+  background: var(--acc-soft);
+  box-shadow: inset 0 0 0 1px var(--acc-edge);
+  color: var(--acc);
+  font-size: 0.8rem; letter-spacing: 0.14em;
+}
+.hero-overview .label::before { content: ""; width: 0.45rem; height: 0.45rem; border-radius: 50%; background: var(--acc); box-shadow: 0 0 0 4px var(--acc-soft); }
+.ho-line { margin: 0; max-width: none; font-size: clamp(1.3rem, 2.1vw, 1.75rem); line-height: 1.42; letter-spacing: -0.012em; color: var(--fg); text-wrap: pretty; }
+.hero-stage:not(:has(.hero-notes)) { grid-template-columns: minmax(0, 1fr); justify-items: center; }
+
+/* the problem statement, said plainly: why it happens, and what we're solving (2026-10-06) */
+.ps { display: grid; gap: 1.25rem 3rem; margin: clamp(1.75rem, 3vw, 2.5rem) 0 0; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 900px) { .ps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.ps > div { padding-top: 1rem; border-top: 1px solid var(--line); }
+.ps dt { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--acc); }
+.ps dd { margin: 0.6rem 0 0; font-size: clamp(1.1rem, 1.5vw, 1.3rem); line-height: 1.45; color: var(--fg); text-wrap: pretty; }
+
+/* =========================================================================
+   Text end to end (2026-10-06, Sathya: "for the overall casestudy have the
+   for all show the text from end to end"). Running text and headings take
+   the full width of the page; side-by-side text splits stack.
+   ========================================================================= */
+:root { --prose: none; }
+.sec-title, .sec-title.xl, .sub, .prose, .aside, .pull, .lead, .hero-line, .hmw-q,
+.takeaway-q, .learnings h3 + p, .more-sum, .rp-note, .stat-cap, .ht-note, .bsw-note,
+.hero-visual figcaption, .ho-line, .ps dd { max-width: none; }
+.split { grid-template-columns: minmax(0, 1fr); gap: clamp(1.25rem, 2.5vw, 2rem); }
+
+/* How it works, simplified (2026-10-06): a quieter alternate ground, and a five-step flow with clear arrows */
+.alt { background: var(--paper-2); }
+.flow-simple { margin-top: 1.5rem; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+@media (max-width: 900px) { .flow-simple { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .flow-simple { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.flow-simple li b { font-size: clamp(1.25rem, 1.8vw, 1.6rem); }
+.flow-simple li span { font-size: 0.95rem; }
+
+/* How it works: the architecture diagram (frontend, backend, outside services) */
+.arch-wrap { margin-top: 1.25rem; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.arch { display: block; width: 100%; min-width: 860px; height: auto; font-family: var(--sans); }
+.ad-zone { fill: rgba(16, 17, 20, 0.025); stroke: var(--rule); stroke-dasharray: 5 6; }
+.ad-zl { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; fill: var(--ink); }
+.ad-zs { font-size: 12.5px; fill: var(--ink-3); }
+.ad-box { fill: #fff; stroke: var(--rule); }
+.ad-box.ad-soft { fill: #fbfaf7; stroke-dasharray: 4 4; }
+.ad-box.ad-model { fill: rgba(21, 102, 90, 0.08); stroke: var(--accent); stroke-width: 1.5; }
+.ad-t { font-size: 17px; font-weight: 600; fill: var(--ink); }
+.ad-t.ad-acc { fill: var(--accent); }
+.ad-s { font-size: 13px; fill: var(--ink-2); }
+.ad-line { fill: none; stroke: var(--ink-2); stroke-width: 1.6; }
+.ad-line.ad-acc { stroke: var(--accent); }
+.ad-line.ad-dash { stroke-dasharray: 5 5; stroke: var(--ink-3); }
+.ad-head { fill: var(--ink-2); }
+.ad-n circle { fill: var(--ink); }
+.ad-n text { font-family: var(--mono); font-size: 12px; fill: #fff; text-anchor: middle; }
+.ad-k { font-family: var(--mono); font-size: 10.5px; fill: var(--accent); }
+.arch-key { list-style: none; margin: 1.5rem 0 0; padding: 0; display: grid; gap: 1rem 2rem; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
+.arch-key li { display: flex; gap: 0.75rem; font-size: 0.975rem; line-height: 1.5; color: var(--fg-2); }
+.arch-key b { flex: none; display: grid; place-items: center; width: 1.6rem; height: 1.6rem; border-radius: 50%; background: var(--ink); color: #fff; font-family: var(--mono); font-size: 0.75rem; font-weight: 500; }
+
+/* the simple four-box diagram, and a lighter Try this (2026-10-06) */
+.arch.arch-simple { min-width: 640px; }
+.ad-box.ad-dark { fill: var(--ink); stroke: var(--ink); }
+.ad-inv { fill: #fff; } .ad-inv2 { fill: rgba(255, 255, 255, 0.7); }
+.ad-zl.ad-acc { fill: var(--accent); }
+.ad-mid { text-anchor: middle; fill: var(--ink-3); }
+.arch-simple .ad-t { font-size: 20px; }
+.arch-simple .ad-s { font-size: 14px; }
+#try .dm-tape { display: none; }
+.demo-stage.is-solo { grid-template-columns: minmax(0, 1fr); justify-items: center; }
+.demo-stage.is-solo .demo-phone { width: min(380px, 100%); justify-self: center; }
+
+/* Try this, with context beside the phone (2026-10-06) */
+.try-ctx { display: grid; gap: clamp(1.5rem, 2.5vw, 2rem); align-content: start; }
+.tc-block .label { margin: 0 0 0.75rem; }
+.tc-lead { margin: 0; font-size: clamp(1.05rem, 1.4vw, 1.2rem); line-height: 1.5; color: var(--fg); }
+.tc-notice { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.85rem; }
+.tc-notice li { padding-left: 1rem; border-left: 2px solid var(--acc); font-size: 0.975rem; line-height: 1.5; color: var(--fg-2); }
+.tc-notice b { color: var(--fg); font-weight: 560; }
+.tc-note { margin: 0; padding-top: 1rem; border-top: 1px solid var(--line); font-size: 0.875rem; line-height: 1.5; color: var(--fg-3); }

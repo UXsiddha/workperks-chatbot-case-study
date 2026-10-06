@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#0B0E14">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230B0E14'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%2315665A'/%3E%3C/svg%3E">
 <title>WorkPerks Chatbot, the detailed research study</title>
-<meta name="description" content="Build case study. An informative in-app chatbot for a corporate benefits app: thirteen tools, a proxy written against a live voucher supplier API, and what the integration taught me.">
+<meta name="description" content="The deep dive behind the WorkPerks Chatbot case study: every layer by filename, the voucher proxy, the data boundary, every capability and the fallback ladder.">
 <link rel="preload" href="public/fonts/BricolageGrotesque-600-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="public/fonts/Geist-var-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="public/screens/flow-ask.gif" as="image" fetchpriority="high">
@@ -73,11 +73,10 @@
     </h1>
 
     <div class="hero-foot">
-      <p class="hero-line">An informative assistant inside a corporate benefits app. Thirteen
-      tools read a catalogue of thirty-five benefits and a live voucher
-      supplier.</p>
+      <p class="hero-line">An informative assistant inside a corporate benefits app. It reads a
+      catalogue of thirty-five benefits and a live voucher supplier.</p>
       <dl class="meta">
-        <div><dt>My role</dt><dd>Sole author of the specification,<br>sole reviewer of the build</dd></div>
+        <div><dt>My role</dt><dd>Product designer,<br>end to end</dd></div>
         <div><dt>What I owned</dt><dd>The architecture, the rules it cannot<br>break, the standard for accepting a build</dd></div>
         <div><dt>Written with</dt><dd>Claude Code, throughout<br>Next.js, Node, Gemini</dd></div>
         <div><dt>Timeline</dt><dd>Aug&ndash;Sep 2026, three weeks<br>prototype to handover</dd></div>
@@ -141,7 +140,7 @@
 <section id="overview" data-title="What I built">
   <div class="wrap">
     <p class="sec-idx" data-reveal><span>01</span>What I built</p>
-    <h2 class="sec-title xl" data-reveal>An informative assistant over thirteen tools, and the server behind it.</h2>
+    <h2 class="sec-title xl" data-reveal>An informative assistant, and the server behind it.</h2>
 
     <div class="split" data-reveal>
       <div class="prose">
@@ -163,24 +162,22 @@
       </div>
     </div>
 
-    <p class="label" data-reveal>The build, in numbers</p>
-    <div class="stats three" data-reveal>
-      <div class="stat">
-        <p class="stat-num"><span data-count="13">13</span></p>
-        <p class="stat-cap">tools, all behind one switch statement. Each one hands back data, or the
-        reason it has none.</p>
-      </div>
-      <div class="stat">
-        <p class="stat-num"><span data-count="2">2</span></p>
-        <p class="stat-cap">model calls per question at most. One picks the tool. The other writes
-        the opening sentence, when that is switched on.</p>
-      </div>
-      <div class="stat">
-        <p class="stat-num"><span data-count="0">0</span></p>
-        <p class="stat-cap">tools that write. Booking, buying and cancelling were never built, so
-        there is no switch for anyone to find.</p>
-      </div>
+    <div class="dd-guide" data-reveal>
+      <p class="label">This page is the optional deep dive</p>
+      <p>The case study itself is <a href="index.html">the main page</a>. Come here
+      for the engineering behind it:</p>
+      <ul>
+        <li><a href="#try">02</a> the prototype&rsquo;s tools, running in this page</li>
+        <li><a href="#method">03</a> how the spec, the build and the audits went</li>
+        <li><a href="#stack">04</a> the five layers, by filename</li>
+        <li><a href="#proxy">05</a> why a proxy had to exist, and its routes</li>
+        <li><a href="#supplier">06</a> six supplier behaviours found by running it</li>
+        <li><a href="#boundary">07</a> exactly what the model can see</li>
+        <li><a href="#tools">08</a> every capability, and what it renders</li>
+        <li><a href="#fallback">09</a> what happens when the model is down</li>
+      </ul>
     </div>
+
   </div>
 </section>
 
@@ -224,7 +221,7 @@
             </div>
             <div class="dm-thread" role="log" aria-live="polite" aria-label="Conversation with the assistant"></div>
             <form class="dm-form" autocomplete="off">
-              <input class="dm-input" type="text" placeholder="Ask for anything &mdash; &ldquo;book a gym&rdquo;" aria-label="Ask the assistant a question">
+              <input class="dm-input" type="text" placeholder="Ask anything" aria-label="Ask the assistant a question">
               <button class="dm-send" type="submit"><span aria-hidden="true">&rarr;</span><span class="vh">Send</span></button>
             </form>
           </div>
@@ -244,20 +241,13 @@
           <button type="button" class="dm-chip" data-ask="What vouchers do I have?">What vouchers do I have?</button>
         </div>
 
-        <p class="label">Now describe a situation</p>
-        <div class="dm-starters">
-          <button type="button" class="dm-chip" data-ask="I have been sleeping badly and running on empty" data-query="stress burnout counselling">I have been sleeping badly</button>
-          <button type="button" class="dm-chip" data-ask="My back has been hurting for weeks" data-query="back pain physiotherapy">My back has been hurting</button>
-          <button type="button" class="dm-chip" data-ask="I am moving to another city next month" data-query="moving to a new city relocation">I am moving city</button>
-        </div>
-
         <p class="aside">
-          Type one of those sentences in yourself and it stops dead. Turning a
-          situation into catalogue words is the model&rsquo;s job, and the model
-          is the one part that could not come along. What routes your typing
-          here is the keyword layer the app drops to when every model has
-          failed. It scores 3 out of 20 on situation-shaped questions where a
-          model scores 18, and that gap is the argument for having one.
+          No model runs on this page. Your typing is routed by the keyword
+          rules the app falls back to when every model has failed. Type a
+          situation, like &ldquo;my back has been hurting&rdquo;, and you will see
+          how far keywords get: this layer scored 3 of 20 on situation
+          questions where the model scored 18. The main page replays four
+          routing decisions the model made in a recorded run.
         </p>
       </div>
     </div>
@@ -363,15 +353,15 @@
       <div class="prose">
         <p class="lead">
           Vibe-coded start to finish with Claude Code: the React screen, the
-          server, the thirteen tools, the proxy, the renderer, the test suite,
+          server, the tools, the proxy, the renderer, the test suite,
           and the three specifications that steered it.
         </p>
       </div>
       <div>
         <p class="pull">
           The loop was never specify and accept. It was specify, build, <span
-          class="mark">run the result against the live database and the live
-          supplier account</span>, and rewrite the specification against what
+          class="mark">run the result against the live database and the
+          supplier&rsquo;s API</span>, and rewrite the specification against what
           those returned.
         </p>
         <p class="aside">
@@ -406,7 +396,7 @@
           <dt>Establishing the facts</dt><dd>Reading the live schema before specifying against it, and recording
           what the supplier API returned rather than what its guide stated.</dd>
           <dt>Reversing on evidence</dt><dd>The specification had the assistant issuing vouchers. Three of six
-          live orders were delivered under a different brand than the one
+          issued orders were delivered under a different brand than the one
           requested, so it now hands off to the voucher screen instead.</dd>
         </dl>
       </div>
@@ -414,7 +404,7 @@
         <p class="label">What Claude Code brought</p>
         <h3>The code and the documents</h3>
         <dl>
-          <dt>The code</dt><dd>Frontend, API route, thirteen tools, proxy, renderer, fallback ladder, suite. Every file in section 04.</dd>
+          <dt>The code</dt><dd>Frontend, API route, tools, proxy, renderer, fallback ladder, suite. Every file in section 04.</dd>
           <dt>The documents</dt><dd>Three specification revisions, the integration notes, the internals reference this page draws on.</dd>
           <dt>Turnaround</dt><dd>A respecification in the morning came back running the same day. That is what made three revisions affordable.</dd>
         </dl>
@@ -438,7 +428,9 @@
         <p>
           Twenty-five questions phrased as situations, with the search
           vocabulary file withheld, and the list committed before any were
-          run. A set written by whoever tuned the search measures the tuning
+          run. Twenty have a benefit that covers them; five test answers to
+          things nothing covers. The file was not kept afterwards, so the run
+          cannot be repeated as it stands. A set written by whoever tuned the search measures the tuning
           rather than the search.
           <em>Committed first, so it could not be edited into passing</em>
         </p>
@@ -473,14 +465,16 @@
         <p class="stat-cap">generated from the live catalogue, not written by hand.</p>
       </div>
       <div class="stat">
-        <p class="label">Answered well</p>
+        <p class="label">Real answer, no rule broken</p>
         <p class="stat-num"><span data-count="261">261</span><span class="unit">/268</span></p>
-        <p class="stat-cap">up from 251. Five of the seven left are correct refusals.</p>
+        <p class="stat-cap">generated questions that ended in a real answer and passed all eleven
+        automated rules, up from 251. Of the seven left, five are correct refusals.</p>
       </div>
       <div class="stat">
-        <p class="label">Routing, held out</p>
+        <p class="label">Situation questions, held out</p>
         <p class="stat-num"><span data-count="18">18</span><span class="unit">/20</span></p>
-        <p class="stat-cap">situation questions sent to the right tool, against 3 of 20 for keyword rules.</p>
+        <p class="stat-cap">reached the right benefit with the model, against 3 of 20 for keyword
+        search on the top result. Measured once, on 1 September.</p>
       </div>
     </div>
 
@@ -548,7 +542,7 @@
           <p>Two calls at most, both wrapped against provider failure.</p>
         </div>
         <ul class="ly-items">
-          <li><b>classifyIntent</b><span>Sends the rules and thirteen tool schemas. Reads back a tool name
+          <li><b>classifyIntent</b><span>Sends the rules and the tool schemas. Reads back a tool name
           and its arguments.</span></li>
           <li><b>composeAnswer</b><span>Optional. Writes one sentence, thrown away if it states a figure the
           data does not have, or slips into system voice.</span></li>
@@ -560,7 +554,7 @@
       <li class="layer">
         <div>
           <p class="ly-k">Tools</p>
-          <h3>One switch, thirteen cases</h3>
+          <h3>One switch, one case per tool</h3>
           <p>Data, or the reason there is none.</p>
         </div>
         <ul class="ly-items">
@@ -586,7 +580,7 @@
     <p class="label" data-reveal>One question in, one rendered answer out</p>
     <div class="dia" data-reveal>
       <div class="dia-scroll">
-        <svg viewBox="0 0 980 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Flow diagram of one request. The question passes a rate limit, a greeting gate and a redaction step, all before any model runs. The model then selects one of thirteen tools. The tool runs, the renderer builds the blocks, the model optionally phrases one sentence, and the answer is returned. The two model steps are marked; everything else is application code.">
+        <svg viewBox="0 0 980 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Flow diagram of one request. The question passes a rate limit, a greeting gate and a redaction step, all before any model runs. The model then selects one tool. The tool runs, the renderer builds the blocks, the model optionally phrases one sentence, and the answer is returned. The two model steps are marked; everything else is application code.">
           <text class="d-k" x="0" y="16">Before any model runs</text>
           <rect class="d-box d-fill" x="0" y="30" width="150" height="62" rx="8"/>
           <text class="d-t" x="75" y="56" text-anchor="middle">Question</text>
@@ -613,7 +607,7 @@
 
           <text class="d-a" x="0" y="208">Model</text>
           <rect class="d-box d-fill" x="0" y="218" width="164" height="62" rx="8"/>
-          <text class="d-t" x="82" y="244" text-anchor="middle">Pick one of 13 tools</text>
+          <text class="d-t" x="82" y="244" text-anchor="middle">Pick one tool</text>
           <text class="d-t sm" x="82" y="262" text-anchor="middle">classifyIntent</text>
           <path class="d-line" d="M164 249 H200"/><path class="d-edge" d="M196 243 L206 249 L196 255"/>
 
@@ -775,15 +769,15 @@
     <div class="split" data-reveal>
       <div class="prose">
         <p class="lead">
-          All six were found by running the integration against the live
-          account. None is in the guide, and two contradict it.
+          All six were found by running the integration against the
+          supplier&rsquo;s API, on the account I had access to. One contradicts
+          the vendor&rsquo;s own documentation outright.
         </p>
       </div>
       <div>
         <p class="aside">
-          A wrapper written from the documentation alone would have been
-          confidently wrong in four places, and one of those would have
-          double-spent.
+          A wrapper written from the documentation alone would have got these
+          wrong, and one of them would have double-spent.
         </p>
       </div>
     </div>
@@ -792,7 +786,7 @@
       <li>
         <h3>Issuing is asynchronous, and a non-zero code does not mean failure</h3>
         <p>
-          The first authorised live issue returned code &ldquo;2812&rdquo;,
+          The first authorised issue returned code &ldquo;2812&rdquo;,
           which appears in no error table, and no voucher. The order was
           queued, not rejected. The outcome is only knowable by polling the
           status call; reissuing the request purchases a second voucher.
@@ -831,9 +825,10 @@
       <li>
         <h3>The brand delivered is not always the brand ordered</h3>
         <p>
-          Three of six live orders were delivered under a brand other than the
-          one requested. So the assistant checks what arrived against what was asked for, and
-          warns with both names.
+          Three of six issued orders were delivered under a brand other than
+          the one requested. It may be a quirk of the account, and I could not
+          rule that out, so the assistant checks what arrived against what was
+          asked for, and warns with both names.
           <em>The primary reason the assistant hands off rather than purchasing</em>
         </p>
       </li>
@@ -886,10 +881,10 @@
 
     <div class="dia" data-reveal>
       <div class="dia-scroll">
-        <svg viewBox="0 0 920 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram. Above a dashed boundary line sits the provider, whose only job is to pick one of thirteen tools. Below it sits the app: the question arrives, the tool runs, the renderer writes the answer. Crossing upward are the question, the rules and the tool schemas. Crossing downward is a tool name. Nothing a tool returned crosses the line.">
+        <svg viewBox="0 0 920 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram. Above a dashed boundary line sits the provider, whose only job is to pick one tool. Below it sits the app: the question arrives, the tool runs, the renderer writes the answer. Crossing upward are the question, the rules and the tool schemas. Crossing downward is a tool name. Nothing a tool returned crosses the line.">
           <text class="d-k" x="0" y="20">Provider</text>
           <rect class="d-box d-fill" x="310" y="32" width="300" height="64" rx="8"/>
-          <text class="d-t" x="460" y="58" text-anchor="middle">Picks one of 13 tools</text>
+          <text class="d-t" x="460" y="58" text-anchor="middle">Picks one tool</text>
           <text class="d-t sm" x="460" y="78" text-anchor="middle">and nothing else</text>
 
           <path class="d-cut" d="M0 152 H920"/>
@@ -897,7 +892,7 @@
 
           <path class="d-line" d="M96 258 V178 H380 V100"/>
           <path class="d-edge" d="M374 106 L380 96 L386 106"/>
-          <text class="d-k" x="104" y="202">The question, the rules, 13 tool schemas</text>
+          <text class="d-k" x="104" y="202">The question, the rules, the tool schemas</text>
 
           <path class="d-line" d="M540 96 V212 H332 V254"/>
           <path class="d-edge" d="M326 248 L332 258 L338 248"/>
@@ -1060,7 +1055,7 @@
         <p class="label">The question</p>
         <div class="fb-qs">
           <button type="button" class="fb-q" data-q="coins" aria-pressed="true">How many coins do I have?</button>
-          <button type="button" class="fb-q" data-q="situation" aria-pressed="false">I have been sleeping badly</button>
+          <button type="button" class="fb-q" data-q="situation" aria-pressed="false">trying to give up cigarettes for months</button>
         </div>
         <p class="label">The rung it falls to</p>
         <div class="fb-rungs">
@@ -1110,10 +1105,9 @@
         <p class="l-num">03</p>
         <h3>Integrate against the live API, not the document</h3>
         <p>
-          Four of the six supplier behaviours recorded in section 06
-          contradict its integration guide. Acting on one of them as
-          documented would have issued a second voucher against a live
-          account.
+          The supplier&rsquo;s documentation and its behaviour disagreed, as
+          section 06 shows. Acting on one finding as documented would have
+          issued a second voucher.
         </p>
       </li>
                 </ol>
@@ -1168,6 +1162,7 @@
 </footer>
 
 <script src="script.js" defer></script>
+<script src="kinetic-grid.js" defer></script>
 
 <!-- The app context the demo runs on: the same snapshot the employee app
      posts with every question, trimmed to the fields the tools read. -->
@@ -1861,8 +1856,8 @@
     var TOOL_NAME = {
       search_benefits: 'search_benefits', get_balance: 'get_balance', get_wallet: 'get_wallet',
       my_orders: 'my_orders', explain: 'explain', benefit_detail: 'benefit_detail',
-      cannot_do: 'cannot_do', __greeting__: 'no tool, answered before routing',
-      __none__: 'no tool matched', __vouchers__: 'search_vouchers, needs the proxy'
+      cannot_do: 'cannot_do', __greeting__: 'none, a greeting',
+      __none__: 'none matched', __vouchers__: 'search_vouchers (proxy)'
     };
 
     /* `quiet` is set when the ask came from elsewhere on the page: taking focus
@@ -1940,7 +1935,7 @@
     function greet() {
       thread.textContent = '';
       render(thread, blocks('__greeting__', {}));
-      toolLabel.textContent = 'no tool, answered before routing';
+      toolLabel.textContent = 'none, a greeting';
     }
     function keepStandingLast() {
       thread.appendChild(standing);
@@ -1949,6 +1944,7 @@
 
     greet();
     keepStandingLast();
+    thread.scrollTop = 0;
   })();
 
 
@@ -1992,7 +1988,9 @@
 
     var QS = {
       coins: { text: 'How many coins do I have?', supplied: null },
-      situation: { text: 'I have been sleeping badly and running on empty', supplied: 'stress burnout counselling' }
+      /* A situation the model routed correctly in a recorded run. Rungs 01 and
+         02 replay that recorded route; nothing is invented for the model. */
+      situation: { text: 'trying to give up cigarettes for months', recorded: 'Tell me about Health programmes & assessments' }
     };
     /* Word for word from the ladder above it, so the two cannot drift. */
     var STATUS = [
@@ -2009,13 +2007,25 @@
       status.textContent = STATUS[rung];
       var item = QS[q];
       if (rung === 3) { render(out, WP.fallback()); return; }
-      /* Rungs 01 and 02 still have a model, so a situation-shaped question
-         reaches the catalogue words. Rung 03 is the keyword layer alone. */
-      var supplied = rung < 2 ? item.supplied : null;
-      render(out, WP.answer(item.text, supplied).blocks);
+      /* Rungs 01 and 02 still have a model: for the situation question they
+         replay its recorded route. Rung 03 is the keyword layer alone, live. */
+      if (rung < 2 && item.recorded) {
+        status.textContent = STATUS[rung] + ' Replayed: the benefit the model\u2019s answer led with in a recorded run.';
+        render(out, WP.answer(item.recorded).blocks);
+        return;
+      }
+      render(out, WP.answer(item.text).blocks);
     }
 
     root.addEventListener('click', function (e) {
+      /* the buttons inside the rendered answer are real: say where they lead */
+      var inner = e.target.closest('.fb-answer [data-route], .fb-answer [data-ask]');
+      if (inner) {
+        status.textContent = inner.hasAttribute('data-route')
+          ? 'In the app this button opens a screen. The assistant never books, buys or cancels anything, so the last step is always a screen.'
+          : 'In the app this chip asks \u201C' + inner.getAttribute('data-ask') + '\u201D as the next question. Try it in the phone in section 02.';
+        return;
+      }
       var b = e.target.closest('button[data-q], button[data-r]');
       if (!b) return;
       var group = b.hasAttribute('data-q') ? 'data-q' : 'data-r';
