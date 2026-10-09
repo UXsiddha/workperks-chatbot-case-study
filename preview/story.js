@@ -37,7 +37,7 @@
     });
   }, { rootMargin: '0px 0px -12% 0px', threshold: 0 });
   $$('.rv').forEach(function (n) { var w = n.parentElement; w.rvChild = n; io.observe(w); });
-  $$('.loops').forEach(function (n) { io.observe(n); });
+  $$('.settle').forEach(function (n) { io.observe(n); });
 
   /* --------------------------------------------------------- counters */
   var cio = new IntersectionObserver(function (es) {
@@ -354,91 +354,86 @@
   }
 
 
-  /* ================================================== conversational design */
-  /* The playground replays three real conversations through engine.js and lights
-     the decision behind each step. The app screens are recorded from the employee
-     app, with the same data this page runs on. */
+  /* ================================================== the hero's cards
+     Dealt from the engine: the question, its answer, the first benefit it
+     found, and the button that benefit's answer ends on. */
+  (function () {
+    var fan = $('#fan');
+    if (!fan) return;
+    var q = 'What can I get?', a = WP.answer(q);
+    var head = a.blocks.filter(function (b) { return b.kind === 'header'; })[0];
+    var rows = a.blocks.filter(function (b) { return b.kind === 'rows'; })[0];
+    var row = rows && rows.rows[0];
+    var id = row && /^detail:(.+)$/.exec(row.route)[1];
+    var detail = id ? WP.blocks('benefit_detail', WP.runTool({ tool: 'benefit_detail', args: { id: id } })) : [];
+    var act = detail.filter(function (b) { return b.kind === 'actions'; })[0];
+    var put = function (key, nodes) { var box = $('[data-fan="' + key + '"]', fan); nodes.forEach(function (n) { box.appendChild(n); }); };
+    put('ask', [WP.el('p', 'fc-me', q)]);
+    if (head) put('answer', [WP.el('p', 'fc-h', head.title)]);
+    if (row) put('row', [WP.el('p', 'fc-label', row.label), WP.el('p', 'fc-value', row.value)]);
+    if (act) put('action', [WP.el('span', 'fc-btn', act.actions[0].label), WP.el('p', 'fc-value', 'a screen the app confirmed it has')]);
+    setTimeout(function () { fan.classList.add('dealt'); }, reduced ? 0 : 250);
+  })();
+
+  /* ================================================== conversational design
+     The phone stays in place. As each decision comes into view, its
+     conversation replays through engine.js from a clean thread. */
   var fmtRoute = function (r) {
     var ks = Object.keys(r.args || {});
     return r.tool + (ks.length ? ' { ' + ks.map(function (k) { return k + ': ' + JSON.stringify(r.args[k]); }).join(', ') + ' }' : '');
   };
-  var CD = [
-    { q: 'How much do I have left?',
-      rail: [['A balance, but not which one', '“Left” fits rupees and Health Coins alike, and the balance tool refuses to guess.'],
-        ['One currency per answer', 'A product rule: rupees and coins never appear in the same answer.'],
-        ['A question back, one chip per balance', 'It also names flexi, the third balance, which it can explain but can’t total.'],
-        ['One tap: “How many coins do I have?”', 'Each chip is a whole question, so it works on its own. 2,750 coins.']],
-      hl: '.dm-chips', then: 'How many coins do I have?' },
-    { q: 'Can you cancel my gym booking?',
-      rail: [['Cancel a booking', 'It understood. The request names both the action and the thing.'],
-        ['Something it has no tool for', 'Booking, buying and cancelling tools were never written, so it can’t pretend.'],
-        ['Say what it can’t do, by name', 'Not “I didn’t follow”: that would send someone off to rephrase a clear question.'],
-        ['Your orders', 'It ends on the screen where cancelling happens, not on a no.']],
-      hl: '.dm-p', act: '.dm-actions',
-      app: { src: 'public/screens/07-orders-screen.webp' } },
-    { q: 'Tell me about Gym & fitness memberships', direct: { tool: 'benefit_detail', args: { id: 'b00' } },
-      rail: [['One named benefit', 'It names a benefit, so it answers about that one, never a list of others.'],
-        ['The catalogue the app sends', 'Price, how it’s paid for and who provides it, sent with the question.'],
-        ['Answer first, then the facts in rows', 'One line answers. Rows carry the detail, so no phrasing can drop a figure.'],
-        ['Open Gym & fitness memberships', 'The button opens the benefit’s own screen, where subscribing happens.']],
-      hl: ['.dm-p', '.dm-rows'], act: '.dm-actions',
-      app: { src: 'public/screens/08-gym-detail.webp' } }
+  var STEPS = [
+    { asks: ['How much do I have left?'], hl: '.dm-chips' },
+    { asks: ['How much do I have left?', 'How many coins do I have?'], hl: '.dm-head' },
+    { asks: ['Can you cancel my gym booking?'], hl: '.dm-actions', app: 'public/screens/07-orders-screen.webp' },
+    { asks: ['Tell me about Gym & fitness memberships'], direct: { tool: 'benefit_detail', args: { id: 'b00' } }, hl: ['.dm-p', '.dm-rows'], app: 'public/screens/08-gym-detail.webp' }
   ];
-  var cdP = phones['phone-cd'], cdRail = $$('#cd-rail li'), cdStage = $('.cd-stage'), cdApp = $('#cd-app');
-  var cdGen = 0, cdCur = 0;
-  function cdLight(k) {
-    cdRail.forEach(function (li, i) { li.classList.toggle('is-on', i <= k); li.classList.toggle('is-now', i === k); });
-  }
-  function cdHl(sel) {
+  var cdP = phones['phone-cd'], stepEls = $$('#story-steps li'), stick = $('.story-stick'), cdApp = $('#cd-app');
+  var stGen = 0, stCur = -1;
+  function hlLast(sel) {
     $$('.dm-hl', cdP.thread).forEach(function (n) { n.classList.remove('dm-hl'); });
     var turns = $$('.dm-ai', cdP.thread), t = turns[turns.length - 1];
-    if (sel && t) [].concat(sel).forEach(function (q) { var n = $(q, t); if (n) n.classList.add('dm-hl'); });
-    cdLead(); setTimeout(cdLead, 450);
+    if (sel && t) [].concat(sel).forEach(function (s) { var n = $(s, t); if (n) n.classList.add('dm-hl'); });
   }
-  /* a leader line from the part of the answer being discussed to the
-     decision in the rail that explains it */
-  var leadSvg = $('#cd-lead');
-  function cdLead() {
-    if (!leadSvg) return;
-    leadSvg.innerHTML = '';
-    if (getComputedStyle(leadSvg).display === 'none') return;
-    var hl = $('.dm-hl', cdP.thread), li = $('#cd-rail li.is-now');
-    if (!hl || !li || cdStage.classList.contains('is-app')) return;
-    var box = $('#cd-play').getBoundingClientRect(), a = hl.getBoundingClientRect(), b = $('b', li).getBoundingClientRect(), r = li.getBoundingClientRect();
-    var x1 = a.right - box.left + 4, y1 = a.top + a.height / 2 - box.top, x2 = r.left - box.left - 10, y2 = b.top + b.height / 2 - box.top, xm = x1 + (x2 - x1) * 0.45;
-    leadSvg.setAttribute('viewBox', '0 0 ' + box.width + ' ' + box.height);
-    leadSvg.innerHTML = '<path d="M' + x1 + ' ' + y1 + ' H' + xm + ' V' + y2 + ' H' + x2 + '"/><circle cx="' + x1 + '" cy="' + y1 + '" r="3.5"/><circle cx="' + x2 + '" cy="' + y2 + '" r="3.5"/>';
-  }
-  window.addEventListener('resize', function () { if (cdP) cdLead(); });
-  function cdPlay(i) {
-    var s = CD[i], g = ++cdGen, alive = function () { return g === cdGen; };
-    cdCur = i;
-    $$('[data-cd]').forEach(function (b) { b.classList.toggle('is-on', Number(b.getAttribute('data-cd')) === i); });
-    cdStage.classList.remove('is-app');
-    cdRail.forEach(function (li, k) { $('b', li).textContent = s.rail[k][0]; $('p', li).textContent = s.rail[k][1]; });
-    $('code', cdRail[0]).textContent = fmtRoute(s.direct || WP.route(s.q));
-    if (s.app) { $('img', cdApp).src = s.app.src; }
-    cdLight(-1);
+  function runStep(i) {
+    if (!cdP || i === stCur) return;
+    stCur = i;
+    var s = STEPS[i], g = ++stGen, alive = function () { return g === stGen; };
+    stepEls.forEach(function (li, k) { li.classList.toggle('is-on', k === i); });
+    stick.classList.remove('is-app');
+    if (s.app) $('img', cdApp).src = s.app;
     cdP.greet();
-    wait(450).then(function () {
+    var chain = Promise.resolve();
+    s.asks.forEach(function (q, k) {
+      var last = k === s.asks.length - 1;
+      chain = chain.then(function () { return alive() ? wait(k ? 500 : 250) : null; })
+        .then(function () { return alive() ? cdP.ask(q, last ? s.direct : null) : null; });
+    });
+    chain.then(function () {
       if (!alive()) return;
-      var asked = cdP.ask(s.q, s.direct);
-      cdLight(0);
-      return wait(420).then(function () { if (alive()) cdLight(1); return asked; });
-    }).then(function () {
-      if (!alive()) return;
-      cdLight(2); cdHl(s.hl);
-      return wait(1500);
-    }).then(function () {
-      if (!alive()) return;
-      cdLight(3);
-      if (s.then) return cdP.ask(s.then).then(function () { if (alive()) cdHl('.dm-head'); });
-      cdHl(s.act);
-      if (s.app) return wait(1400).then(function () { if (alive()) { cdStage.classList.add('is-app'); cdLead(); } });
+      hlLast(s.hl);
+      if (s.app) return wait(1600).then(function () { if (alive()) stick.classList.add('is-app'); });
     });
   }
-  if (cdP) {
-    autoplay(cdStage, CD.length, cdPlay, 9500);
+  stepEls.forEach(function (li, i) {
+    var s = STEPS[i], q = s.asks[s.asks.length - 1], code = $('.st-route', li);
+    if (code) code.textContent = fmtRoute(s.direct || WP.route(q));
+  });
+  if (cdP && stepEls.length) {
+    if (narrow.matches || reduced) {
+      autoplay(stick, STEPS.length, function (i) { stCur = -1; runStep(i); }, 9000);
+    } else {
+      var stTimer = null;
+      var stIO = new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          var i = stepEls.indexOf(e.target);
+          clearTimeout(stTimer);
+          stTimer = setTimeout(function () { runStep(i); }, 150);
+        });
+      }, { rootMargin: '-42% 0px -42% 0px' });
+      stepEls.forEach(function (li) { stIO.observe(li); });
+    }
   }
 
   /* phrasings converge on one tool. The route is worked out here, for each one. */
