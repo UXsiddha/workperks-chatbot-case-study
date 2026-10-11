@@ -519,3 +519,23 @@ html:not(.js) .pin-stage { position: relative; height: auto; }
 }
 .pb-stack { height: 620px; } .pc-3 { top: 380px; left: 6%; } @media (max-width: 520px) { .pb-stack { height: 640px; } }
 .c-head .kicker::before { display: none; }
+
+/* ============================================================= animated links
+   Adapted from Skiper UI's skiper40 (free version, credited in the footer):
+   an underline that wipes in on hover or focus, and an arrow that rises in. */
+.slink { position: relative; display: inline-flex; align-items: center; text-decoration: none; color: inherit; }
+.slink::before { content: ''; position: absolute; left: 0; bottom: -0.1em; width: 100%; height: max(1px, 0.06em); background: currentColor; pointer-events: none;
+  transform: scaleX(0); transform-origin: right; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.slink:hover::before, .slink:focus-visible::before { transform: scaleX(1); transform-origin: left; }
+.slink:focus-visible { outline-offset: 6px; }
+.sl-arr { flex: none; width: 0.55em; height: 0.55em; margin-left: 0.35em; fill: none; stroke: currentColor; stroke-width: 1.25; stroke-linecap: round; stroke-linejoin: round;
+  opacity: 0; transform: translateY(0.25em); transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.slink:hover .sl-arr, .slink:focus-visible .sl-arr { opacity: 1; transform: none; }
+.sl-lg { font: 500 clamp(1.15rem, 1.6vw, 1.4rem)/1.3 var(--display); letter-spacing: -0.01em; color: var(--green); }
+.bar-nav .slink { color: var(--ink-2); }
+.bar-nav .slink:hover { color: var(--green); }
+.close-nav { gap: 1rem 2.5rem; }
+.foot .slink { color: var(--ink-2); }
+.credit { margin: 0.6rem 0 0; font-size: 0.78rem; color: var(--ink-3); }
+@media (hover: none) { .sl-lg .sl-arr { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .slink::before, .sl-arr { transition: none; } }
