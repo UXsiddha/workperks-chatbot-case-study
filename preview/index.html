@@ -333,28 +333,10 @@
   </div>
 </section>
 
-<!-- ================================================= 08 DISCOVERIES -->
-<section class="sec discoveries" id="discoveries" aria-labelledby="disc-h">
-  <div class="wrap">
-    <div class="mark"><span>08</span><span>Real-world discoveries</span></div>
-    <h2 id="disc-h" class="h-sec">Reality doesn&rsquo;t behave like documentation.</h2>
-    <p class="body">Six supplier behaviours the integration guide doesn&rsquo;t document, found by running the integration on the account I had access to.</p>
-    <ol class="disc">
-      <li class="disc-h" aria-hidden="true"><span>Expected</span><span>Observed</span><span>Decision</span></li>
-      <li><span>A non-zero code means the order failed.</span><span>The order was queued, not rejected. Reissuing it buys a second voucher.</span><span>Poll the status. Never retry.</span></li>
-      <li><span>&ldquo;Inactive product&rdquo; means rejected, as the vendor&rsquo;s catalogue says.</span><span>It comes back again and again while an order is still settling.</span><span>Read it as pending.</span></li>
-      <li><span>Orders settle the same way each time.</span><span>Four took eighty to a hundred seconds. The fifth returned at once.</span><span>Three states, pending, issued and failed, and keep the order id.</span></li>
-      <li><span>Stock goes down after a purchase.</span><span>Every brand reported the same stock afterwards.</span><span>Stock never confirms or fails a purchase.</span></li>
-      <li><span>The brand delivered is the brand ordered.</span><span>Three of six orders arrived under a different brand.</span><span>Check, warn with both names, and hand off instead of buying.</span></li>
-      <li><span>Published store addresses are usable.</span><span>They don&rsquo;t resolve to real locations.</span><span>Name the town, never an address.</span></li>
-    </ol>
-  </div>
-</section>
-
-<!-- ================================================= 09 WHAT I LEARNED -->
+<!-- ================================================= 08 WHAT I LEARNED -->
 <section class="sec learnings" id="learnings" aria-labelledby="learn-h">
   <div class="wrap">
-    <div class="mark"><span>09</span><span>What I learned</span></div>
+    <div class="mark"><span>08</span><span>What I learned</span></div>
     <h2 id="learn-h" class="visually-hidden">What I learned</h2>
     <ol class="learn" id="learn">
       <li><h3 class="rv">AI UX is behaviour design.</h3><p>The screen was the easy part. The work was deciding what the AI may decide, when it says no, and how a no still helps.</p></li>
@@ -367,6 +349,24 @@
       <p class="h-statement rv">From designing the interface <em>to designing the entire product behaviour.</em></p>
       <p class="body">AI coding didn&rsquo;t replace the design process for me. It expanded how much of the product I could personally take ownership of.</p>
     </div>
+  </div>
+</section>
+
+<!-- ================================================= 09 DISCOVERIES -->
+<section class="sec discoveries" id="discoveries" aria-labelledby="disc-h">
+  <div class="wrap">
+    <div class="mark"><span>09</span><span>Real-world discoveries</span></div>
+    <h2 id="disc-h" class="h-sec">Reality doesn&rsquo;t behave like documentation.</h2>
+    <p class="body">Six supplier behaviours the integration guide doesn&rsquo;t document, found by running the integration on the account I had access to.</p>
+    <ol class="disc">
+      <li class="disc-h" aria-hidden="true"><span>Expected</span><span>Observed</span><span>Decision</span></li>
+      <li><span>A non-zero code means the order failed.</span><span>The order was queued, not rejected. Reissuing it buys a second voucher.</span><span>Poll the status. Never retry.</span></li>
+      <li><span>&ldquo;Inactive product&rdquo; means rejected, as the vendor&rsquo;s catalogue says.</span><span>It comes back again and again while an order is still settling.</span><span>Read it as pending.</span></li>
+      <li><span>Orders settle the same way each time.</span><span>Four took eighty to a hundred seconds. The fifth returned at once.</span><span>Three states, pending, issued and failed, and keep the order id.</span></li>
+      <li><span>Stock goes down after a purchase.</span><span>Every brand reported the same stock afterwards.</span><span>Stock never confirms or fails a purchase.</span></li>
+      <li><span>The brand delivered is the brand ordered.</span><span>Three of six orders arrived under a different brand.</span><span>Check, warn with both names, and hand off instead of buying.</span></li>
+      <li><span>Published store addresses are usable.</span><span>They don&rsquo;t resolve to real locations.</span><span>Name the town, never an address.</span></li>
+    </ol>
   </div>
 </section>
 
