@@ -435,7 +435,7 @@
       $$('.scr img').forEach(function (img, i) {
         gsap.fromTo(img, { clipPath: 'inset(16% 10% 16% 10% round 34px)' }, { clipPath: 'inset(0% 0% 0% 0% round 34px)', ease: 'none',
           scrollTrigger: { trigger: '.screens', start: 'top 90%', end: 'top 35%', scrub: 0.5 } });
-        gsap.to(img, { y: [-20, -60, -35][i] || -30, ease: 'none', scrollTrigger: { trigger: '.screens', start: 'top bottom', end: 'bottom top', scrub: true } });
+        gsap.to(img.closest('.scr'), { y: [-10, -28, -16][i] || -14, ease: 'none', scrollTrigger: { trigger: '.screens', start: 'top bottom', end: 'bottom top', scrub: true } });
       });
 
       /* count-ups, once each */
