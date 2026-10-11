@@ -73,3 +73,10 @@
   font-display: swap;
   src: url('public/fonts/SpaceMono-700-latin.woff2') format('woff2');
 }
+
+/* Figtree (display and labels), SIL Open Font Licence, self-hosted */
+@font-face {
+  font-family: 'Figtree';
+  src: url('public/fonts/figtree-var.woff2') format('woff2');
+  font-weight: 300 900; font-style: normal; font-display: swap;
+}
