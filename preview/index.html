@@ -4,79 +4,89 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light">
-<meta name="theme-color" content="#F7F4EE">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2327573F'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23F7F4EE'/%3E%3C/svg%3E">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#111214">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23111214'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23FF8A3D'/%3E%3C/svg%3E">
 <title>WorkPerks Chatbot, a product design case study</title>
-<meta name="description" content="Bringing employee benefits into a conversation: how I designed, built and tested an AI assistant for a corporate benefits app.">
-<link rel="preload" href="public/fonts/Outfit-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+<meta name="description" content="I built an AI assistant that makes employee benefits easier to use: designed, built and validated end to end.">
+<link rel="preload" href="public/fonts/SpaceGrotesk-var-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="public/fonts/Geist-var-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="fonts.css">
 <link rel="stylesheet" href="story.css">
 <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
-<a class="skip" href="#problem">Skip to the case study</a>
+<a class="skip" href="#built">Skip to the case study</a>
 
 <header class="bar" aria-label="Case study">
-  <a class="bar-mark" href="https://uxsiddha.github.io/home" aria-label="Back to the portfolio"><span>sathya</span><span>siddha</span></a>
+  <a class="bar-id" href="https://uxsiddha.github.io/home"><b>SP</b><span>Sathyasiddha Pattanaik</span></a>
   <nav class="bar-nav" aria-label="Chapters">
-    <a class="slink" href="#problem">problem</a><a class="slink" href="#conv-design">conversation</a><a class="slink" href="#trust">trust</a><a class="slink" href="#works">system</a><a class="slink" href="#testing">evidence</a><a class="slink" href="#learnings">learnings</a>
+    <a class="slink" href="#problem">Problem</a><a class="slink" href="#conv-design">Conversation</a><a class="slink" href="#works">System</a><a class="slink" href="#building">Build</a><a class="slink" href="#testing">Testing</a><a class="slink" href="#learnings">Learnings</a>
   </nav>
-  <div class="bar-btns">
-    <a class="btn" href="#try">Try it <span aria-hidden="true">&darr;</span></a>
-    <a class="btn" href="../detailed.html">Deep dive <span aria-hidden="true">&nearr;</span></a>
-  </div>
+  <a class="btn btn-solid" href="#try">Try the prototype</a>
   <span class="bar-progress" aria-hidden="true"><i></i></span>
 </header>
 
 <main id="main">
 
-<!-- =============================================================== 1 · HERO
-     Four cards dealt from the prototype's own engine: the question, the
-     answer, a benefit it found, and the screen it hands over to. -->
-<section class="hero" id="top" aria-labelledby="hero-h">
-  <div class="fan" id="fan" aria-label="One question, answered by the prototype">
-    <article class="fc fc-1"><p class="fc-k">you ask</p><div class="fc-body" data-fan="ask"></div><i class="fc-dot d-lav" aria-hidden="true"></i></article>
-    <article class="fc fc-2"><p class="fc-k">it answers</p><div class="fc-body" data-fan="answer"></div><i class="fc-dot d-olive" aria-hidden="true"></i></article>
-    <article class="fc fc-3"><p class="fc-k">from the catalogue</p><div class="fc-body" data-fan="row"></div><i class="fc-dot d-pink" aria-hidden="true"></i></article>
-    <article class="fc fc-4"><p class="fc-k">to the screen</p><div class="fc-body" data-fan="action"></div><i class="fc-dot d-sky" aria-hidden="true"></i></article>
-  </div>
-  <p class="note n-hero"><svg class="arrow" viewBox="0 0 120 90" aria-hidden="true"><path d="M110 80 C 120 40, 80 10, 20 14 M20 14 l12 -9 M20 14 l13 7"/></svg>real answers, from the prototype&rsquo;s own catalogue</p>
-  <div class="hero-copy">
-    <h1 id="hero-h" class="display"><span class="d-sm">i brought employee benefits</span><span class="d-lg">into a conversation</span></h1>
-    <p class="hero-lede">An AI assistant inside a corporate benefits app that helps employees discover, understand and act on their benefits. I designed it, built it with Claude Code and tested it, end to end.</p>
-    <dl class="meta">
-      <div><dt>role</dt><dd>Product designer, end to end</dd></div>
-      <div><dt>built with</dt><dd>Claude Code, Next.js, Node, Gemini</dd></div>
-      <div><dt>timeline</dt><dd>Aug&ndash;Sep 2026, three weeks</dd></div>
-    </dl>
-  </div>
-</section>
-
-<!-- =============================================================== 2 · PROBLEM -->
-<section class="sec problem" id="problem" aria-labelledby="problem-h">
-  <div class="wrap pb-grid">
-    <div class="pb-copy">
-      <p class="kicker">the problem</p>
-      <h2 id="problem-h" class="title rv">the benefits weren&rsquo;t missing. <em>using them took work.</em></h2>
-      <p class="body">To book or buy anything, an employee first had to find the right benefit, then work out how it is funded.</p>
+<!-- ================================================= 01 HERO -> 02 WHAT I BUILT
+     One pinned stage, one phone. The headline gives way to the product as the
+     phone crosses the stage; a lighter surface opens behind it. -->
+<section class="act-a pin" id="top" data-pin data-span="0.7" aria-labelledby="hero-h">
+  <div class="pin-stage">
+    <div class="a-surface" aria-hidden="true"></div>
+    <div class="wrap a-grid">
+      <div class="a-hero">
+        <div class="mark"><span>01</span><span>Case study</span><span>Aug&ndash;Sep 2026</span></div>
+        <h1 id="hero-h" class="h-hero">I built an AI assistant that makes employee benefits easier to use.</h1>
+        <p class="lede">A conversational layer over WorkPerks that helps employees discover, understand and act on their benefits &mdash; designed, built and validated end to end.</p>
+        <dl class="cols">
+          <div><dt>Role</dt><dd>Product designer, end to end</dd></div>
+          <div><dt>Built with</dt><dd>Claude Code &middot; Next.js &middot; Node &middot; Gemini</dd></div>
+          <div><dt>Timeline</dt><dd>Three weeks, Aug&ndash;Sep 2026</dd></div>
+        </dl>
+      </div>
+      <div class="a-phone"><div class="phone" id="phone-hero"></div></div>
+      <div class="a-built" id="built">
+        <div class="mark"><span>02</span><span>What I built</span></div>
+        <h2 class="h-sec" id="built-h" tabindex="-1">An assistant inside a corporate benefits app.</h2>
+        <p class="body">It finds what the company offers, explains what a benefit covers, reads what an employee already holds, and takes them to the screen where they act.</p>
+        <ol class="asks is-auto" id="built-asks" aria-label="The questions the phone is answering">
+          <li data-q="What can I get?"><span>Benefits</span>What can I get?</li>
+          <li data-q="How many coins do I have?"><span>Balances</span>How many coins do I have?</li>
+          <li data-q="What is flexi?"><span>Policy</span>What is flexi?</li>
+          <li data-q="Show me my orders."><span>Holdings</span>Show me my orders.</li>
+          <li data-q="Can I get a voucher?"><span>Vouchers</span>Can I get a voucher?</li>
+        </ol>
+        <p class="fine">The prototype&rsquo;s own tools and renderer, running in this page.</p>
+      </div>
     </div>
-    <ul class="pb-stack settle" aria-label="What an employee had to work through">
-      <li class="pc pc-1"><span class="pc-in p-lav"><b>35</b></span><p>benefits</p></li>
-      <li class="pc pc-2"><span class="pc-in p-olive"><b>10</b></span><p>catalogues, each with its own vendors and rules</p></li>
-      <li class="pc pc-3"><span class="pc-in p-pink"><b>3</b></span><p>separate currencies: Reward rupees, Health Coins and the flexi allowance</p></li>
-    </ul>
   </div>
 </section>
 
-<!-- the fragmented journey resolves into one conversation -->
+<!-- ================================================= 03 WHY I BUILT IT -->
+<section class="sec problem" id="problem" aria-labelledby="problem-h">
+  <div class="wrap">
+    <div class="mark"><span>03</span><span>Why I built it</span></div>
+    <h2 id="problem-h" class="h-statement rv">The problem wasn&rsquo;t a lack of benefits. <em>It was the effort required to use them.</em></h2>
+    <div class="pb-row">
+      <p class="body">Thirty-five benefits across ten catalogues, each with its own vendors and rules, plus flexi benefits, Reward rupees, Health Coins and which wallet pays. To book or buy anything, an employee first had to find the right benefit, then work out how it is funded.</p>
+      <dl class="figs">
+        <div><dt>Benefits</dt><dd>35</dd></div>
+        <div><dt>Catalogues</dt><dd>10</dd></div>
+        <div><dt>Currencies</dt><dd>3</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- the usual journey collapses into one question -->
 <section class="act-c pin" id="journey" data-pin data-span="0.75" aria-labelledby="journey-h">
   <div class="pin-stage">
-    <div class="sheet c-sheet"><div class="wrap c-wrap">
+    <div class="wrap c-wrap">
       <div class="c-head">
-        <p class="kicker"><span class="c-l0">the usual way</span><span class="c-l1">with the assistant</span></p>
-        <h2 id="journey-h" class="title-md">employees don&rsquo;t think in navigation structures. <em>they think in questions.</em></h2>
+        <p class="kicker"><span class="c-l0">The usual way</span><span class="c-l1">With the assistant</span></p>
+        <h2 id="journey-h" class="h-sec">Employees don&rsquo;t think in navigation structures. <em>They think in questions.</em></h2>
       </div>
       <div class="c-flow">
         <p class="c-old">Need &middot; Search &middot; Navigate &middot; Understand &middot; Check eligibility &middot; Find benefit &middot; Redeem</p>
@@ -92,52 +102,45 @@
         <div class="c-ask" aria-hidden="true"><span class="c-typed" id="c-typed">Can I use this for Cult?</span><i>&rarr;</i></div>
       </div>
       <p class="c-note"><span class="c-n0">Every one of these lives somewhere different in the app.</span><span class="c-n1">In the assistant, they all start in the same place.</span></p>
-    </div></div>
+    </div>
   </div>
 </section>
 
-<!-- =============================================================== 3 · CONVERSATIONAL DESIGN
-     The phone stays; the conversation in it changes as each decision
-     comes into view. -->
+<!-- ================================================= 04 CONVERSATIONAL DESIGN -->
 <section class="sec cd" id="conv-design" aria-labelledby="cd-h">
   <div class="wrap cd-intro">
-    <p class="kicker">conversational design</p>
-    <h2 id="cd-h" class="title rv">designing the conversation, <em>not just the chat ui.</em></h2>
-    <p class="body">The interface was only one part of the experience. I had to design how the assistant understands intent, responds, guides the user and moves the conversation forward.</p>
+    <div class="mark"><span>04</span><span>Conversational design</span></div>
+    <h2 id="cd-h" class="h-statement rv">I didn&rsquo;t just design the chat interface. <em>I designed how users communicate with the product.</em></h2>
   </div>
   <div class="wrap story" id="story">
     <div class="story-phone">
       <div class="story-stick">
         <div class="phone" id="phone-cd"></div>
         <figure class="cd-app" id="cd-app" aria-hidden="true"><img alt="" loading="lazy" decoding="async"></figure>
-        <p class="story-src">The prototype&rsquo;s tools and renderer, running in this page. Routing here is the app&rsquo;s keyword layer; in the app, the AI does that step.</p>
+        <p class="story-src">Routing here is the app&rsquo;s keyword layer; in the app, the AI does that step.</p>
       </div>
     </div>
     <ol class="story-steps" id="story-steps">
       <li data-step="0">
-        <p class="st-k">01 &middot; understand intent</p>
-        <p class="note">it asks instead of guessing</p>
+        <p class="st-k">Intent &middot; 01</p>
         <h3>&ldquo;How much do I have left?&rdquo;</h3>
         <p>&ldquo;Left&rdquo; fits rupees and Health Coins alike, and the balance tool refuses to guess. A product rule: rupees and coins never appear in the same answer. So the question comes back as a choice, one chip per balance, and it names flexi, the third balance, which it can explain but can&rsquo;t total.</p>
         <code class="st-route"></code>
       </li>
       <li data-step="1">
-        <p class="st-k">02 &middot; one tap moves it forward</p>
-        <p class="note">a chip is a whole question</p>
+        <p class="st-k">Context &middot; 02</p>
         <h3>&ldquo;How many coins do I have?&rdquo;</h3>
-        <p>Each follow-up is written as a complete question, so it works on its own: 2,750 coins, what they are, and what to ask next.</p>
+        <p>Each follow-up is written as a complete question, so it works on its own. The AI sees the employee&rsquo;s earlier questions, never its own earlier answers: those are built from balances and orders.</p>
         <code class="st-route"></code>
       </li>
       <li data-step="2">
-        <p class="st-k">03 &middot; answer, then action</p>
-        <p class="note">a no that still goes somewhere</p>
+        <p class="st-k">Action &middot; 03</p>
         <h3>&ldquo;Can you cancel my gym booking?&rdquo;</h3>
         <p>It understood. Booking, buying and cancelling tools were never written, so it names exactly what it can&rsquo;t do, and ends on the screen where cancelling happens, not on a no.</p>
         <code class="st-route"></code>
       </li>
       <li data-step="3">
-        <p class="st-k">04 &middot; structure the answer</p>
-        <p class="note">answer first, facts in rows</p>
+        <p class="st-k">Structure &middot; 04</p>
         <h3>&ldquo;Tell me about Gym &amp; fitness memberships&rdquo;</h3>
         <p>One line answers. Rows carry what it costs, how it&rsquo;s paid for and who provides it, so no phrasing can drop a figure. The button opens the benefit&rsquo;s own screen, where subscribing happens.</p>
         <code class="st-route"></code>
@@ -145,75 +148,54 @@
     </ol>
   </div>
 
-  <!-- many phrasings, one route; situations the AI routed -->
-  <div class="wrap lang">
-    <div class="sheet lang-card tilt-l">
-      <p class="kicker">natural language</p>
-      <h3 class="title-sm">people don&rsquo;t ask the same way twice.</h3>
-      <div class="cv" id="cv">
-        <ul class="cv-says" aria-label="Ways of asking"></ul>
-        <svg class="cv-lines" aria-hidden="true"></svg>
-        <div class="cv-outs">
-          <div class="cv-out" data-out="coins"><p class="cv-tool">get_balance <i>currency: coins</i></p><p class="cv-ans">2,750 coins</p><p class="cv-why">Same intent, same tool, same answer.</p></div>
-          <div class="cv-out" data-out="ask"><p class="cv-tool">get_balance <i>currency: ?</i></p><p class="cv-ans">&ldquo;Which balance do you mean?&rdquo;</p><p class="cv-why">No currency named, so it asks rather than guess.</p></div>
-        </div>
-      </div>
-      <p class="fine">Each phrasing in turn, routed live by the app&rsquo;s keyword backup in this page. In the app the AI reads the question first.</p>
+  <div class="wrap phr">
+    <div class="phr-l">
+      <p class="kicker">Different words, one intent</p>
+      <h3 class="h-sub">People don&rsquo;t ask the same way twice.</h3>
+      <p class="body-sm">Each phrasing in turn, routed live by the app&rsquo;s keyword backup in this page. In the app the AI reads the question first, and handles the harder case: a situation, with no product named.</p>
     </div>
-    <div class="sheet rec-card tilt-r">
-      <p class="kicker">situations, not product names</p>
-      <h3 class="title-sm">what the AI made of four everyday sentences.</h3>
-      <ol class="cv-rec" aria-label="Recorded routes">
-        <li><q>cough that won&rsquo;t go away, don&rsquo;t want a waiting room</q><b>Doctor consultations</b><i class="ok">right</i></li>
-        <li><q>trying to give up cigarettes for months</q><b>Health programmes &amp; assessments</b><i class="ok">right</i></li>
-        <li><q>tablets every day for my blood pressure</q><b>Pharmacy &amp; medical supplies</b><i class="ok">right</i></li>
-        <li><q>sleeping badly, running on empty</q><b>Digital challenges</b><i class="no">wrong: Employee Assistance Programme</i></li>
-      </ol>
-      <p class="fine">The benefit each answer led with, in the recorded run behind the held-out comparison below.</p>
+    <div class="cv" id="cv">
+      <ul class="cv-says" aria-label="Ways of asking"></ul>
+      <svg class="cv-lines" aria-hidden="true"></svg>
+      <div class="cv-outs">
+        <div class="cv-out" data-out="coins"><p class="cv-tool">get_balance <i>currency: coins</i></p><p class="cv-ans">2,750 coins</p><p class="cv-why">Same intent, same tool, same answer.</p></div>
+        <div class="cv-out" data-out="ask"><p class="cv-tool">get_balance <i>currency: ?</i></p><p class="cv-ans">&ldquo;Which balance do you mean?&rdquo;</p><p class="cv-why">No currency named, so it asks rather than guess.</p></div>
+      </div>
     </div>
   </div>
-</section>
 
-<!-- =============================================================== 4 · CONTEXT, INTENT AND TRUST -->
-<section class="sec trust" id="trust" aria-labelledby="trust-h">
-  <div class="wrap">
-    <p class="kicker">context, intent and trust</p>
-    <h2 id="trust-h" class="title rv">the ai understands. <em>the application decides.</em></h2>
+  <div class="wrap rec">
+    <p class="kicker">Situations, not product names &middot; recorded routes</p>
+    <ol class="cv-rec" aria-label="Recorded routes">
+      <li><q>cough that won&rsquo;t go away, don&rsquo;t want a waiting room</q><b>Doctor consultations</b><i class="ok">Right</i></li>
+      <li><q>trying to give up cigarettes for months</q><b>Health programmes &amp; assessments</b><i class="ok">Right</i></li>
+      <li><q>tablets every day for my blood pressure</q><b>Pharmacy &amp; medical supplies</b><i class="ok">Right</i></li>
+      <li><q>sleeping badly, running on empty</q><b>Digital challenges</b><i class="no">Wrong &rarr; Employee Assistance Programme</i></li>
+    </ol>
+    <p class="fine">The benefit each answer led with, in the recorded run behind the held-out comparison in Testing.</p>
   </div>
-  <div class="wrap trust-grid">
-    <article class="sheet tr tr-1">
-      <p class="tr-k"><i class="p-lav"></i>what it carries forward</p>
-      <h3 class="title-sm">context by design, not by memory.</h3>
-      <p class="body-sm">The AI sees the employee&rsquo;s earlier questions, never its own earlier answers: those are built from balances and orders.</p>
-      <div class="ctx-mini">
-        <p class="ctx-line"><i>user</i>What can I get?</p>
-        <p class="ctx-line is-cut"><i>assistant</i>[previous answer omitted]</p>
-        <p class="ctx-line"><i>user</i>Tell me about Gym &amp; fitness memberships</p>
-      </div>
-      <p class="fine">What the AI is sent, built on the server on every turn.</p>
-    </article>
-    <article class="sheet tr tr-2">
-      <p class="tr-k"><i class="p-olive"></i>what the application decides</p>
-      <h3 class="title-sm">the model picks a tool. never a fact.</h3>
+
+  <div class="wrap trust">
+    <div class="tr">
+      <p class="kicker">What the application decides</p>
       <dl class="scope">
         <div><dt>It understands</dt><dd>Questions about benefits, balances, orders, gift vouchers and the app itself.</dd></div>
         <div><dt>It can</dt><dd>Find, explain, read what you hold, and open the screen where you act.</dd></div>
         <div><dt>It cannot</dt><dd>Book, buy, cancel or change a declaration. Those tools were never written.</dd></div>
         <div><dt>It never</dt><dd>Shows a full voucher code, adds rupees to coins, invents an address, or answers from memory.</dd></div>
       </dl>
-    </article>
-    <article class="sheet tr tr-3">
-      <p class="tr-k"><i class="p-pink"></i>when it can&rsquo;t help</p>
-      <h3 class="title-sm">every no still offers a way on.</h3>
-      <div class="mini" data-voice="Where can I update my dependents?" data-take="2"><p class="label">doesn&rsquo;t understand</p></div>
-      <div class="mini" data-voice="Anything for my parents?" data-take="2"><p class="label">benefit isn&rsquo;t switched on</p></div>
-    </article>
+    </div>
+    <div class="tr tr-mini">
+      <p class="kicker">When it can&rsquo;t help, it still offers a way on</p>
+      <div class="mini" data-voice="Where can I update my dependents?" data-take="2"><p class="label">Doesn&rsquo;t understand</p></div>
+      <div class="mini" data-voice="Anything for my parents?" data-take="2"><p class="label">Benefit isn&rsquo;t switched on</p></div>
+    </div>
   </div>
 
   <div class="wrap ba-wrap">
     <div class="ba-head">
-      <p class="kicker">clarity over ai-sounding language</p>
-      <h3 class="title-sm">three answers i rewrote after testing.</h3>
+      <p class="kicker">Clarity over AI-sounding language</p>
+      <h3 class="h-sub">Three answers I rewrote after testing.</h3>
       <p class="body-sm">Each is recorded in the code, with the question that exposed it.</p>
       <p class="ba-switch" aria-hidden="true"><span data-ba="before" class="is-on">Before</span><span data-ba="after">After</span></p>
     </div>
@@ -240,39 +222,39 @@
   </div>
 </section>
 
-<!-- =============================================================== 5 · SYSTEM AND IMPLEMENTATION -->
+<!-- ================================================= 05 HOW THE AI WORKS -->
 <section class="act-e pin" id="works" data-pin data-span="0.75" aria-labelledby="works-h">
   <div class="pin-stage">
-    <div class="sheet e-sheet"><div class="wrap e-wrap">
+    <div class="wrap e-wrap">
       <div class="e-head">
-        <p class="kicker">the system</p>
-        <h2 id="works-h" class="title-md">from a sentence <em>to a screen.</em></h2>
+        <div class="mark"><span>05</span><span>How the AI works</span></div>
+        <h2 id="works-h" class="h-sec">The AI understands. <em>The application decides.</em></h2>
       </div>
       <ol class="sys" id="sys" aria-label="One question, through the system">
-        <li data-k="0"><span class="sys-k">the question</span><div class="sys-node"><p class="sys-me">Can you cancel my gym booking?</p></div><p class="sys-p">In the employee&rsquo;s words, sent with what the app already knows: benefits, balances, orders and its screens.</p></li>
-        <li data-k="1"><span class="sys-k">ai router</span><div class="sys-node is-ai"><code>cannot_do</code><small>thing: cancel my gym booking<br>screen: orders</small></div><p class="sys-p">One call. The model reads the sentence and returns the name of a tool. Never a fact.</p></li>
-        <li data-k="2"><span class="sys-k">tool</span><div class="sys-node"><b>Names what it can&rsquo;t do</b><small>and checks the screen exists</small></div><p class="sys-p">Ordinary code, one per kind of question. Each returns data, or the reason there is none.</p></li>
-        <li data-k="3"><span class="sys-k">application data</span><div class="sys-node"><b>Your orders</b><small>a screen the app confirmed it has</small></div><p class="sys-p">The app&rsquo;s own data, or the voucher supplier&rsquo;s API through a small proxy.</p></li>
-        <li data-k="4"><span class="sys-k">response</span><div class="sys-node is-out"><p>I can&rsquo;t do cancelling your gym booking myself &mdash; I can explain anything and take you to where it happens.</p><span class="sys-btn">Your orders</span></div><p class="sys-p">Built by the app, in code. Every button goes to a screen the app confirmed it has.</p></li>
+        <li data-k="0"><span class="sys-k">User &middot; conversation</span><div class="sys-node"><p class="sys-me">Can you cancel my gym booking?</p></div><p class="sys-p">In the employee&rsquo;s words, sent with what the app already knows: benefits, balances, orders and its screens.</p></li>
+        <li data-k="1"><span class="sys-k">AI router</span><div class="sys-node is-ai"><code>cannot_do</code><small>thing: cancel my gym booking<br>screen: orders</small></div><p class="sys-p">One call. The model reads the sentence and returns the name of a tool. Never a fact.</p></li>
+        <li data-k="2"><span class="sys-k">Tools</span><div class="sys-node"><b>Names what it can&rsquo;t do</b><small>and checks the screen exists</small></div><p class="sys-p">Ordinary code, one per kind of question. Each returns data, or the reason there is none.</p></li>
+        <li data-k="3"><span class="sys-k">Application data &middot; APIs</span><div class="sys-node"><b>Your orders</b><small>a screen the app confirmed it has</small></div><p class="sys-p">The app&rsquo;s own data, or the voucher supplier&rsquo;s API through a small proxy.</p></li>
+        <li data-k="4"><span class="sys-k">Response</span><div class="sys-node is-out"><p>I can&rsquo;t do cancelling your gym booking myself &mdash; I can explain anything and take you to where it happens.</p><span class="sys-btn">Your orders</span></div><p class="sys-p">Built by the app, in code. Every button goes to a screen the app confirmed it has.</p></li>
       </ol>
       <p class="sys-note">In the app the model fills in the tool&rsquo;s arguments; the ones shown are what this page&rsquo;s keyword layer produces for the same question.</p>
-    </div></div>
+    </div>
   </div>
 </section>
 
 <section class="sec sys-more" aria-label="The system in detail">
   <div class="wrap sm-grid">
-    <article class="sheet sm-data">
-      <p class="kicker">data boundary</p>
-      <h3 class="title-sm">the model doesn&rsquo;t need to see everything.</h3>
+    <div class="sm-data">
+      <p class="kicker">Data boundary</p>
+      <h3 class="h-sub">The model doesn&rsquo;t need to see everything.</h3>
       <p class="body-sm">Only the question crosses to the AI, with emails and long digit runs stripped on the server. Balances, orders and voucher codes stay in the app.</p>
       <div class="df-scroll" tabindex="0" aria-label="Data flow diagram, scrolls sideways on small screens"><svg class="dataflow" viewBox="0 0 1000 260" role="img" aria-labelledby="df-t">
         <title id="df-t">The question goes from the phone to the server, which strips personal details and sends only the question to the AI. Balances, orders and codes never leave the app. Vouchers come from the supplier through a proxy that holds the credentials.</title>
-        <rect class="df-box" x="10" y="95" width="170" height="70" rx="14"/><text class="df-t" x="95" y="126">Phone</text><text class="df-s" x="95" y="146">the question</text>
-        <rect class="df-box df-dark" x="300" y="95" width="200" height="70" rx="14"/><text class="df-t df-inv" x="400" y="126">Server</text><text class="df-s df-inv2" x="400" y="146">strips emails &amp; numbers</text>
-        <rect class="df-box df-ai" x="620" y="10" width="200" height="70" rx="14"/><text class="df-t df-acc" x="720" y="41">AI model</text><text class="df-s" x="720" y="61">sees the question only</text>
-        <rect class="df-box" x="620" y="180" width="170" height="70" rx="14"/><text class="df-t" x="705" y="211">Proxy</text><text class="df-s" x="705" y="231">holds the credentials</text>
-        <rect class="df-box" x="830" y="180" width="160" height="70" rx="14"/><text class="df-t" x="910" y="211">Supplier API</text><text class="df-s" x="910" y="231">live vouchers</text>
+        <rect class="df-box" x="10" y="95" width="170" height="70" rx="4"/><text class="df-t" x="95" y="126">Phone</text><text class="df-s" x="95" y="146">the question</text>
+        <rect class="df-box df-dark" x="300" y="95" width="200" height="70" rx="4"/><text class="df-t df-inv" x="400" y="126">Server</text><text class="df-s df-inv2" x="400" y="146">strips emails &amp; numbers</text>
+        <rect class="df-box df-ai" x="620" y="10" width="200" height="70" rx="4"/><text class="df-t df-acc" x="720" y="41">AI model</text><text class="df-s" x="720" y="61">sees the question only</text>
+        <rect class="df-box" x="620" y="180" width="170" height="70" rx="4"/><text class="df-t" x="705" y="211">Proxy</text><text class="df-s" x="705" y="231">holds the credentials</text>
+        <rect class="df-box" x="830" y="180" width="160" height="70" rx="4"/><text class="df-t" x="910" y="211">Supplier API</text><text class="df-s" x="910" y="231">live vouchers</text>
         <path class="df-line" id="df1" d="M180 130 H300"/>
         <path class="df-line df-acc" id="df2" d="M500 115 C 560 115, 560 45, 620 45"/>
         <path class="df-line" id="df3" d="M500 145 C 560 145, 560 215, 620 215"/>
@@ -283,135 +265,145 @@
         <text class="df-k" x="400" y="210">stays in the app:</text><text class="df-k" x="400" y="228">balances &middot; orders &middot; codes</text>
       </svg></div>
       <p class="df-hint" aria-hidden="true">Swipe to see the AI and the proxy &rarr;</p>
-    </article>
-    <article class="sheet sm-ladder">
-      <p class="kicker">when the ai is unavailable</p>
-      <h3 class="title-sm">four steps down, and the last one still answers.</h3>
+    </div>
+    <div class="sm-side">
+      <p class="kicker">Thirteen tools</p>
+      <dl class="tools">
+        <div><dt>Find</dt><dd><code>search_benefits</code> <code>benefit_detail</code> <code>explain</code></dd></div>
+        <div><dt>Balances</dt><dd><code>get_balance</code> <code>get_wallet</code></dd></div>
+        <div><dt>Holdings</dt><dd><code>my_orders</code> <code>list_my_vouchers</code></dd></div>
+        <div><dt>Vouchers</dt><dd><code>search_vouchers</code> <code>voucher_stores</code> <code>vouchers_near</code></dd></div>
+        <div><dt>The app</dt><dd><code>open_screen</code> <code>about_app</code> <code>cannot_do</code></dd></div>
+      </dl>
+      <p class="kicker k-gap">When the AI is unavailable</p>
       <ol class="ladder">
-        <li><b>Retry the same model</b><span>A rate limit or timeout. A slower answer: it waits as long as the provider asks.</span></li>
+        <li><b>Retry the same model</b><span>A rate limit or timeout: it waits as long as the provider asks.</span></li>
         <li><b>Try the second model</b><span>The first is gone or retired. The same answer, no waiting.</span></li>
-        <li><b>Keyword rules</b><span>Every model failed. A correct but narrower answer, still from live data.</span></li>
-        <li><b>Helpful fallback</b><span>Nothing recognised the question. Live benefits as rows and a way to browse, never a flat failure.</span></li>
+        <li><b>Keyword rules</b><span>Every model failed. A narrower answer, still from live data.</span></li>
+        <li><b>Helpful fallback</b><span>Live benefits as rows and a way to browse, never a flat failure.</span></li>
       </ol>
-      <p class="fine">A used-up quota and a model retired mid-project both happened in testing.</p>
-    </article>
-  </div>
-
-  <div class="wrap build">
-    <div class="build-head">
-      <p class="kicker">building it with claude code</p>
-      <h3 class="title rv">i didn&rsquo;t hand the design off. <em>i built the system i was designing.</em></h3>
-      <p class="note n-build">design &rarr; prompt &rarr; code &rarr; run &rarr; test &rarr; break &rarr; iterate</p>
     </div>
-    <div class="facts">
-      <div class="fact f-1"><span class="pc-in p-sky"><b><span data-count="3">3</span></b></span><p>specification revisions in three weeks, each rewritten against what the live systems returned.</p></div>
-      <div class="fact f-2"><span class="pc-in p-olive"><b><span data-count="18">18</span>&rarr;<span data-count="8">8</span></b></span><p>tools the first spec asked for. Reading the database first showed ten already existed, so eight needed building.</p></div>
-      <div class="fact f-3"><span class="pc-in p-lav"><b><span data-count="9">9</span></b></span><p>defects found by a separate agent auditing the build against the spec.</p></div>
-    </div>
-    <div class="who">
-      <div><p class="tr-k"><i class="p-pink"></i>what I brought</p><p>The architecture, the rules it cannot break, reading the live schema before specifying against it, and reversing on evidence: the spec had it issuing vouchers, until three of six orders arrived under the wrong brand.</p></div>
-      <div><p class="tr-k"><i class="p-sky"></i>what Claude Code brought</p><p>The code, from the React screen to the proxy and the test suite, and the documents. A respecification in the morning came back running the same day.</p></div>
-    </div>
-    <p class="deep"><a class="slink sl-lg" href="../detailed.html">The technical deep dive: tools, routing, the proxy and the fallback code<svg class="sl-arr" viewBox="0 0 10 10" aria-hidden="true"><path d="M1.004 9.166 9.337.833m0 0v8.333m0-8.333H1.004"/></svg></a></p>
   </div>
 </section>
 
-<!-- =============================================================== 6 · TESTING AND EVIDENCE -->
-<section class="sec evidence" id="testing" aria-labelledby="test-h">
+<!-- ================================================= 06 BUILDING THE PRODUCT -->
+<section class="sec building" id="building" aria-labelledby="build-h">
   <div class="wrap">
-    <p class="kicker">testing and evidence</p>
-    <h2 id="test-h" class="title rv">not to prove it worked. <em>to check it behaved the way i decided it should.</em></h2>
-    <p class="body-sm ev-scope">Automated and scripted evaluations of the assistant&rsquo;s behaviour. They are not usability results and not business outcomes.</p>
+    <div class="mark"><span>06</span><span>Building the product</span></div>
+    <h2 id="build-h" class="h-statement rv">I didn&rsquo;t hand the design off to engineering. <em>I built the system I was designing.</em></h2>
   </div>
-  <div class="wrap ev-grid">
-    <article class="sheet ev ev-auto">
-      <p class="tr-k"><i class="p-olive"></i>automated scenario testing</p>
-      <div class="ev-nums">
-        <div><p class="num"><span data-count="268">268</span></p><p>scenarios, generated from the live catalogue rather than written by hand.</p></div>
-        <div><p class="num"><span data-count="261">261</span><small>/268</small></p><p>ended in a real answer with none of eleven automated rules broken. Five of the seven left are correct refusals.</p></div>
-      </div>
-      <p class="fam-label">The 268, by kind of question</p>
+  <div class="screens" id="screens">
+    <figure class="scr scr-1"><img src="public/screens/08-gym-detail.webp" alt="The Gym &amp; fitness memberships screen in the employee app, with a Subscribe button." loading="lazy" decoding="async"><figcaption><span>Benefit screen</span>Where &ldquo;Open Gym &amp; fitness memberships&rdquo; lands</figcaption></figure>
+    <figure class="scr scr-2"><img src="public/screens/07-orders-screen.webp" alt="The Orders screen in the employee app: an active gym membership and an upcoming lab test." loading="lazy" decoding="async"><figcaption><span>Orders screen</span>Where &ldquo;Your orders&rdquo; lands</figcaption></figure>
+    <figure class="scr scr-3"><img src="public/screens/06-voucher-catalogue.webp" alt="The voucher answer in the app: brands with their values and stock, read live from the supplier." loading="lazy" decoding="async"><figcaption><span>Live vouchers</span>Brands, values and stock, read from the supplier</figcaption></figure>
+  </div>
+  <div class="wrap">
+    <ol class="loop" id="loop" aria-label="The loop"><li>Design</li><li>Prompt</li><li>Code</li><li>Run</li><li>Test</li><li>Break</li><li>Iterate</li></ol>
+    <dl class="cols cols-3 facts">
+      <div><dt>Spec revisions</dt><dd><span class="big"><span data-count="3">3</span></span>in three weeks, each rewritten against what the live systems returned.</dd></div>
+      <div><dt>Tools to build</dt><dd><span class="big"><span data-count="18">18</span>&rarr;<span data-count="8">8</span></span>The first spec asked for 18. Reading the database first showed ten already existed.</dd></div>
+      <div><dt>Defects found</dt><dd><span class="big"><span data-count="9">9</span></span>by a separate agent auditing the build against the spec.</dd></div>
+    </dl>
+    <div class="who">
+      <div><p class="kicker">What I brought</p><p>The architecture, the rules it cannot break, reading the live schema before specifying against it, and reversing on evidence: the spec had it issuing vouchers, until three of six orders arrived under the wrong brand.</p></div>
+      <div><p class="kicker">What Claude Code brought</p><p>The code, from the React screen to the proxy and the test suite, and the documents. A respecification in the morning came back running the same day.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================= 07 TESTING -->
+<section class="sec testing" id="testing" aria-labelledby="test-h">
+  <div class="wrap">
+    <div class="mark"><span>07</span><span>Testing and validation</span></div>
+    <h2 id="test-h" class="h-statement rv">Not to prove it worked. <em>To check it behaved the way I decided it should.</em></h2>
+    <p class="body ev-scope">Automated and scripted evaluations of the assistant&rsquo;s behaviour. They don&rsquo;t show universal accuracy, and they aren&rsquo;t usability or business results.</p>
+    <div class="metrics">
+      <div class="m-row"><p class="m-num"><span data-count="268">268</span></p><div class="m-txt"><p class="m-k">Generated scenarios</p><p>Generated from the live catalogue rather than written by hand.</p></div></div>
+      <div class="m-row"><p class="m-num"><span data-count="261">261</span><small>/268</small></p><div class="m-txt"><p class="m-k">Real answers, no rule broken</p><p>Ended in a real answer with none of eleven automated rules broken. Five of the seven left are correct refusals.</p></div></div>
+      <div class="m-row"><p class="m-num"><span data-count="18">18</span><small>/20</small></p><div class="m-txt"><p class="m-k">Held-out comparison &middot; measured once, 1 September</p><p>Situation questions that reached the right benefit with the AI, against <b>3 of 20</b> for keyword search alone.</p>
+        <div class="vs-bars" aria-hidden="true"><div><span>With the AI</span><i style="--w:90%"></i><b>18/20</b></div><div><span>Keywords only</span><i style="--w:15%"></i><b>3/20</b></div></div></div></div>
+    </div>
+    <div class="fam-wrap">
+      <p class="kicker">The 268, by kind of question</p>
       <div class="families" id="families"></div>
       <p class="family-q" id="family-q" aria-live="polite"></p>
-    </article>
-    <article class="sheet ev ev-held">
-      <p class="tr-k"><i class="p-pink"></i>held-out comparison &middot; measured once, 1 September</p>
-      <p class="num"><span data-count="18">18</span><small>/20</small></p>
-      <p>situation questions reached the right benefit with the AI, against 3 of 20 for keyword search.</p>
-      <div class="vs-bars" aria-hidden="true">
-        <div><span>With the AI</span><i style="--w:90%"></i><b>18/20</b></div>
-        <div><span>Keywords only</span><i style="--w:15%"></i><b>3/20</b></div>
-      </div>
-      <p class="note n-ev">one of the two misses is up in the conversation section</p>
-    </article>
-  </div>
-  <div class="wrap disc-wrap">
-    <div class="disc-head">
-      <p class="kicker">found by running it</p>
-      <h3 class="title-sm">reality doesn&rsquo;t behave like documentation.</h3>
-      <p class="body-sm">Six supplier behaviours the integration guide doesn&rsquo;t document, found by running the integration on the account I had access to.</p>
     </div>
+  </div>
+</section>
+
+<!-- ================================================= 08 DISCOVERIES -->
+<section class="sec discoveries" id="discoveries" aria-labelledby="disc-h">
+  <div class="wrap">
+    <div class="mark"><span>08</span><span>Real-world discoveries</span></div>
+    <h2 id="disc-h" class="h-sec">Reality doesn&rsquo;t behave like documentation.</h2>
+    <p class="body">Six supplier behaviours the integration guide doesn&rsquo;t document, found by running the integration on the account I had access to.</p>
     <ol class="disc">
-      <li><p class="d-a">The order was queued, not rejected. Reissuing it buys a second voucher.</p><p class="d-x">Expected: a non-zero code means the order failed.</p><p class="d-d">Poll the status. Never retry.</p></li>
-      <li><p class="d-a">&ldquo;Inactive product&rdquo; comes back again and again while an order is still settling.</p><p class="d-x">Expected: it means rejected, as the vendor&rsquo;s catalogue says.</p><p class="d-d">Read it as pending.</p></li>
-      <li><p class="d-a">Four orders took eighty to a hundred seconds. The fifth returned at once.</p><p class="d-x">Expected: orders settle the same way each time.</p><p class="d-d">Three states, pending, issued and failed, and keep the order id.</p></li>
-      <li><p class="d-a">Every brand reported the same stock after a purchase.</p><p class="d-x">Expected: stock goes down after a purchase.</p><p class="d-d">Stock never confirms or fails a purchase.</p></li>
-      <li><p class="d-a">Three of six orders arrived under a different brand.</p><p class="d-x">Expected: the brand delivered is the brand ordered.</p><p class="d-d">Check, warn with both names, and hand off instead of buying.</p></li>
-      <li><p class="d-a">Published store addresses don&rsquo;t resolve to real locations.</p><p class="d-x">Expected: they are usable.</p><p class="d-d">Name the town, never an address.</p></li>
+      <li class="disc-h" aria-hidden="true"><span>Expected</span><span>Observed</span><span>Decision</span></li>
+      <li><span>A non-zero code means the order failed.</span><span>The order was queued, not rejected. Reissuing it buys a second voucher.</span><span>Poll the status. Never retry.</span></li>
+      <li><span>&ldquo;Inactive product&rdquo; means rejected, as the vendor&rsquo;s catalogue says.</span><span>It comes back again and again while an order is still settling.</span><span>Read it as pending.</span></li>
+      <li><span>Orders settle the same way each time.</span><span>Four took eighty to a hundred seconds. The fifth returned at once.</span><span>Three states, pending, issued and failed, and keep the order id.</span></li>
+      <li><span>Stock goes down after a purchase.</span><span>Every brand reported the same stock afterwards.</span><span>Stock never confirms or fails a purchase.</span></li>
+      <li><span>The brand delivered is the brand ordered.</span><span>Three of six orders arrived under a different brand.</span><span>Check, warn with both names, and hand off instead of buying.</span></li>
+      <li><span>Published store addresses are usable.</span><span>They don&rsquo;t resolve to real locations.</span><span>Name the town, never an address.</span></li>
     </ol>
   </div>
 </section>
 
-<!-- =============================================================== 7 · TRY IT -->
-<section class="sec try" id="try" aria-labelledby="try-h">
-  <div class="wrap">
-    <div class="frame">
-      <div class="try-grid">
-        <div class="try-copy">
-          <p class="kicker">the working prototype</p>
-          <h2 id="try-h" class="title-md">try the assistant yourself.</h2>
-          <p class="body-sm">The prototype&rsquo;s own tools, renderer and catalogue: 35 benefits (27 switched on for this employee), a wallet and eight past orders. The AI can&rsquo;t run in a static page, so typing is matched by the app&rsquo;s keyword backup layer.</p>
-          <ol class="asks" aria-label="Try asking">
-            <li><button type="button" data-ask="What can I get?" data-for="phone-try">What can I get?</button></li>
-            <li><button type="button" data-ask="How much is left in my wellness allowance?" data-for="phone-try">How much is left in my wellness allowance?</button></li>
-            <li><button type="button" data-ask="Can I get a voucher?" data-for="phone-try">Can I get a voucher?</button></li>
-            <li><button type="button" data-ask="Show me my orders." data-for="phone-try">Show me my orders.</button></li>
-          </ol>
-          <p class="note n-try">go on, ask it something</p>
-        </div>
-        <div class="try-phone"><div class="phone" id="phone-try" data-interactive></div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- =============================================================== 8 · LEARNINGS -->
+<!-- ================================================= 09 WHAT I LEARNED -->
 <section class="sec learnings" id="learnings" aria-labelledby="learn-h">
   <div class="wrap">
-    <p class="kicker">what i learned</p>
+    <div class="mark"><span>09</span><span>What I learned</span></div>
     <h2 id="learn-h" class="visually-hidden">What I learned</h2>
     <ol class="learn" id="learn">
-      <li><h3>ai ux is behaviour design.</h3><p>The screen was the easy part. The work was deciding what the AI may decide, when it says no, and how a no still helps.</p></li>
-      <li><h3>the model shouldn&rsquo;t own the product.</h3><p>It picks a tool. Facts, rules and every word of a refusal belong to the app, which is why an outage degrades the assistant instead of breaking it.</p></li>
-      <li><h3>building showed me what a static design couldn&rsquo;t.</h3><p>Reading the live database first turned a spec for eighteen tools into eight. Three of six voucher orders arriving under the wrong brand reversed the plan to issue vouchers.</p></li>
-      <li><h3>building became faster. verification became harder.</h3><p>A respecification in the morning ran the same day. Finding out what was actually true, of the database, the supplier and my own decisions, did not speed up.</p></li>
-      <li><h3>fallbacks are part of the experience.</h3><p>The provider failing turned out more common than our own bugs: a used-up quota, and a model retired mid-project. The last rung still answers from live data.</p></li>
-      <li><h3>ai coding expanded my role as a designer.</h3><p>I owned the spec, the architecture, the rules and the standard for accepting a build, and Claude Code turned each decision into running code.</p></li>
+      <li><h3 class="rv">AI UX is behaviour design.</h3><p>The screen was the easy part. The work was deciding what the AI may decide, when it says no, and how a no still helps.</p></li>
+      <li><h3 class="rv">The model should not own the product&rsquo;s data or business rules.</h3><p>It picks a tool. Facts, rules and every word of a refusal belong to the app, which is why an outage degrades the assistant instead of breaking it.</p></li>
+      <li><h3 class="rv">Building became faster, but verification became more important.</h3><p>A respecification in the morning ran the same day. Finding out what was actually true, of the database, the supplier and my own decisions, did not speed up.</p></li>
+      <li><h3 class="rv">Real systems reveal constraints that static designs cannot.</h3><p>Reading the live database first turned a spec for eighteen tools into eight. Three of six voucher orders arriving under the wrong brand reversed the plan to issue vouchers.</p></li>
+      <li><h3 class="rv">AI coding expanded how much of the product I could take ownership of.</h3><p>I owned the spec, the architecture, the rules and the standard for accepting a build, and Claude Code turned each decision into running code.</p></li>
     </ol>
+    <div class="finale">
+      <p class="h-statement rv">From designing the interface <em>to designing the entire product behaviour.</em></p>
+      <p class="body">AI coding didn&rsquo;t replace the design process for me. It expanded how much of the product I could personally take ownership of.</p>
+    </div>
   </div>
-  <div class="wrap close">
-    <p class="close-line rv">from designing the interface <em>to designing the entire product behaviour.</em></p>
-    <nav class="close-nav" aria-label="Where next">
-      <a class="slink sl-lg" href="https://uxsiddha.github.io/generative-emr-case-study/">Next: Generative EMR<svg class="sl-arr" viewBox="0 0 10 10" aria-hidden="true"><path d="M1.004 9.166 9.337.833m0 0v8.333m0-8.333H1.004"/></svg></a>
-      <a class="slink sl-lg" href="https://uxsiddha.github.io/wellness-store-case-study/">Wellness Store<svg class="sl-arr" viewBox="0 0 10 10" aria-hidden="true"><path d="M1.004 9.166 9.337.833m0 0v8.333m0-8.333H1.004"/></svg></a>
-      <a class="slink sl-lg" href="https://uxsiddha.github.io/home">Portfolio<svg class="sl-arr" viewBox="0 0 10 10" aria-hidden="true"><path d="M1.004 9.166 9.337.833m0 0v8.333m0-8.333H1.004"/></svg></a>
+</section>
+
+<!-- ================================================= 10 FINAL PROTOTYPE: back to the opening's phone -->
+<section class="sec try" id="try" aria-labelledby="try-h">
+  <div class="try-stage">
+    <div class="wrap a-grid try-grid">
+      <div class="try-copy">
+        <div class="mark"><span>10</span><span>The prototype</span></div>
+        <h2 id="try-h" class="h-sec">Try the assistant yourself.</h2>
+        <p class="body-sm">The prototype&rsquo;s own tools, renderer and catalogue: 35 benefits (27 switched on for this employee), a wallet and eight past orders. The AI can&rsquo;t run in a static page, so typing is matched by the app&rsquo;s keyword backup layer.</p>
+        <ol class="asks" aria-label="Try asking">
+          <li><button type="button" data-ask="What can I get?" data-for="phone-try"><span>Benefits</span>What can I get?</button></li>
+          <li><button type="button" data-ask="How much is left in my wellness allowance?" data-for="phone-try"><span>Policy</span>How much is left in my wellness allowance?</button></li>
+          <li><button type="button" data-ask="Can I get a voucher?" data-for="phone-try"><span>Vouchers</span>Can I get a voucher?</button></li>
+          <li><button type="button" data-ask="Show me my orders." data-for="phone-try"><span>Holdings</span>Show me my orders.</button></li>
+        </ol>
+      </div>
+      <div class="a-phone"><div class="phone" id="phone-try" data-interactive></div></div>
+    </div>
+  </div>
+  <div class="wrap end">
+    <nav class="end-nav" aria-label="Where next">
+      <a class="slink sl-lg" href="../detailed.html">The technical deep dive<svg class="sl-arr" viewBox="0 0 10 10" aria-hidden="true"><path d="M1.004 9.166 9.337.833m0 0v8.333m0-8.333H1.004"/></svg></a>
+      <a class="slink sl-lg" href="https://uxsiddha.github.io/generative-emr-case-study/">Next project: Generative EMR<svg class="sl-arr" viewBox="0 0 10 10" aria-hidden="true"><path d="M1.004 9.166 9.337.833m0 0v8.333m0-8.333H1.004"/></svg></a>
     </nav>
-    <p class="foot">Sathyasiddha Pattanaik &middot; Product Designer &middot; <a class="slink" href="mailto:sathyasiddhaux@gmail.com">sathyasiddhaux@gmail.com</a> &middot; <a class="slink" href="https://www.linkedin.com/in/sathyasiddha-pattanaik/">LinkedIn<svg class="sl-arr" viewBox="0 0 10 10" aria-hidden="true"><path d="M1.004 9.166 9.337.833m0 0v8.333m0-8.333H1.004"/></svg></a></p>
-    <p class="credit">Link animations adapted from <a class="slink" href="https://skiper-ui.com">Skiper UI</a>.</p>
   </div>
 </section>
 
 </main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <nav class="foot-links" aria-label="Elsewhere">
+      <a class="slink" href="https://uxsiddha.github.io/home">Portfolio</a><a class="slink" href="mailto:sathyasiddhaux@gmail.com">Email</a><a class="slink" href="https://www.linkedin.com/in/sathyasiddha-pattanaik/">LinkedIn</a>
+    </nav>
+    <p>Sathyasiddha Pattanaik &middot; Product Designer &middot; Link animations adapted from <a class="slink" href="https://skiper-ui.com">Skiper UI</a></p>
+  </div>
+</footer>
 
 <script type="application/json" id="demo-context">{"benefits":[{"id":"b00","title":"Gym & fitness memberships","category":"Fitness & Movement","funding":"flexi","action":"Subscribe","amount":"₹24,000 / year","status":"Cashless from your flexi allowance","availability":"live","terms":["gym","workout","health club","fitness centre","exercise"],"vendors":["cult.fit","FITPASS","Fitness First India","Anytime Fitness","Snap Fitness","Gold’s Gym"],"variants":["Annual gym membership","Premium chain annual membership"]},{"id":"b01","title":"Studios & group classes","category":"Fitness & Movement","funding":"flexi","action":"Book","amount":"From your ₹24,000 head","status":"Cashless, per session or pack","availability":"live","terms":["yoga","pilates","zumba","dance","boxing","martial arts","crossfit","group class","studio"],"vendors":["cult.fit","FITPASS","Sarva Yoga","The Yoga Institute","Zumba India network","city studio panel"],"variants":["Yoga","Pilates & barre","CrossFit & functional","Dance","Martial arts & boxing"]},{"id":"b02","title":"Fitness tracking & digital workouts","category":"Fitness & Movement","funding":"member","action":"Subscribe","amount":"Member price","status":"Goods — no tax exemption applies","availability":"live","terms":["smartwatch","fitness band","wearable","tracker","home workout","step counter"],"vendors":["Dr Store (owned)","Decathlon","Cultsport","Noise","boAt","Fire-Boltt"],"variants":["Fitness wearable","Smart scale","Digital fitness subscription — at-home workouts"]},{"id":"b03","title":"Doctor consultations","category":"Health & Clinical Care","funding":"member","action":"Book","amount":"Member price","status":"Not covered by your policy","availability":"live","terms":["doctor","physician","gp","consultation","appointment","clinic","sick","unwell","ill","illness","specialist","psychiatrist","telemedicine","pain","ache","hurts","injury","fever","back","knee","shoulder","neck","joint","muscle","stomach","headache","migraine","skin","throat"],"vendors":["Bajaj Health (owned)","Vidal Quick Consult (in-group)","Practo","Apollo 24|7","Tata 1mg","MediBuddy"],"variants":["Online doctor consultation","General physician (OPD)","Specialist consult (OPD)","Psychiatrist consult","Follow-up consult"]},{"id":"b04","title":"Diagnostics & lab tests","category":"Health & Clinical Care","funding":"member","action":"Book","amount":"Member price","status":"Covered only around a hospital stay","availability":"live","terms":["blood test","lab test","pathology","scan","x-ray","mri","ultrasound","sample","report","investigation"],"vendors":["Bajaj Health (owned)","Healthians","Thyrocare","Dr Lal PathLabs","Metropolis","Redcliffe Labs"],"variants":["Home sample collection","Full-body health panel","Targeted panel","Imaging & scans","Family bundle"]},{"id":"b05","title":"Preventive health checks","category":"Health & Clinical Care","funding":"member","action":"Book","amount":"You pay","status":"Your company has no programme yet","availability":"live","terms":["health check","checkup","check-up","screening","annual check","master check","preventive"],"vendors":["Bajaj Health (owned)","Vidal HRA (in-group)","Healthians","Thyrocare","Apollo Health Check","Dr Lal PathLabs"],"variants":["Master health check-up","Executive health check-up","On-site health camp","Statutory occupational health examination","Health risk assessment"]},{"id":"b06","title":"Pharmacy & medical supplies","category":"Health & Clinical Care","funding":"member","action":"Buy","amount":"Member price","status":"Delivered, negotiated rate","availability":"live","terms":["medicine","medicines","pharmacy","chemist","prescription","tablets","drugs","bp monitor","glucometer","refill"],"vendors":["Indevice (existing)","Dr Store (owned)","Tata 1mg","PharmEasy","Apollo Pharmacy","Netmeds"],"variants":["Chronic medicine refill","Over-the-counter & wellness","BP monitor","Glucometer & strips","CGM system"]},{"id":"b07","title":"Dental & eye care","category":"Health & Clinical Care","funding":"member","action":"Book","amount":"Member price","status":"Explicitly excluded from cover","availability":"soon","terms":["dentist","dental","teeth","tooth","cavity","root canal","braces","eye","eyes","glasses","spectacles","vision","optician","eyesight","lens"],"vendors":["Clove Dental","Sabka Dentist","FMS Dental","Lenskart","Titan Eyeplus","Specsmakers"],"variants":["Dental check-up & cleaning","Fillings & root canal","Orthodontics","Eye test"]},{"id":"b08","title":"Health programmes & assessments","category":"Health & Clinical Care","funding":"member","action":"Enrol","amount":"You pay","status":"Not funded at your company","availability":"live","terms":["smoking","tobacco","quit","alcohol","diabetes","sugar","cholesterol","cardiac","heart","lifestyle programme"],"vendors":["Bajaj Health care programmes (owned)","Fitterfly","HealthifyMe","Wellthy Therapeutics","Zyla Health","BeatO"],"variants":["Quit smoking & tobacco cessation","Alcohol use assessment","Pre-diabetes","Diabetes","Cholesterol & cardiac risk"]},{"id":"b09","title":"Employee Assistance Programme","category":"Mind & Emotional Wellbeing","funding":"member","action":"Book","amount":"You pay","status":"No programme at your company today","availability":"live","terms":["counselling","counsellor","therapy","therapist","mental health","stress","anxiety","depression","burnout","wellbeing","psychologist","eap","burnt out","burned out","exhausted","overwhelmed"],"vendors":["Mindsure (owned)","1to1help","YourDOST","Amaha (formerly InnerHour)","Silver Oak Health","TalktoAngel"],"variants":["Counselling sessions","Wellbeing app subscription","Wellbeing assessment & survey"]},{"id":"b10","title":"Workshops & sensitisation","category":"Mind & Emotional Wellbeing","funding":"budget","action":"Arrange","amount":"Free for you","status":"HR buys it — no cost to you","availability":"live","terms":["posh","harassment","awareness","workshop","session","sensitisation","mindfulness"],"vendors":["1to1help","YourDOST","Silver Oak Health","Manah Wellness","Rainmaker (POSH)","Complykaro (POSH)"],"variants":["POSH awareness & sensitisation","Mental health & burnout awareness session","Manager sensitisation — spotting distress","Women’s wellbeing session","Mindfulness & focus session"]},{"id":"b11","title":"Diet & nutrition consults","category":"Nutrition & Food","funding":"member","action":"Book","amount":"You pay","status":"Not funded at your company","availability":"nocity","terms":["dietitian","nutritionist","diet","nutrition","meal plan","weight loss","eating"],"vendors":["Bajaj Health (owned)","HealthifyMe","Fitelo","Fitterfly","Zyla Health","Cloudnine Nutrition"],"variants":["Single dietitian consult","30-day plan","90-day plan","Annual plan","Condition-linked clinical diet"]},{"id":"b12","title":"Sports nutrition & supplements","category":"Nutrition & Food","funding":"member","action":"Buy","amount":"Member price","status":"Goods — negotiated rate","availability":"live","terms":["protein","whey","supplement","supplements","vitamins","creatine","omega"],"vendors":["Nutriworld (owned)","HealthKart","MuscleBlaze","Optimum Nutrition India","GNC India","Fast&Up"],"variants":["Whey & protein","Multivitamins","Creatine","Omega-3","Protein snacks"]},{"id":"b13","title":"Childcare & crèche","category":"Family, Kids & Care","funding":"member","action":"Enrol","amount":"You pay","status":"No crèche head or policy exists","availability":"soon","terms":["creche","crèche","daycare","day care","nanny","aaya","babysitter","child","kids","toddler","nursery","playschool"],"vendors":["KLAY","Footprints Childcare","ProEves","Sunshine Preschools","Podar Jumbo Kids","EuroKids"],"variants":["Full-day daycare","Half-day daycare","At-home nanny or aaya"]},{"id":"b14","title":"Maternity & new parent","category":"Family, Kids & Care","funding":"ins","action":"Book","amount":"₹50,000 – ₹75,000","status":"Cashless at network hospitals","availability":"live","terms":["maternity","pregnancy","pregnant","baby","newborn","delivery","childbirth","prenatal","postnatal","lactation","breastfeeding","new parent"],"vendors":["Vidal Femme Connect (in-group)","Cloudnine","Apollo Cradle","Motherhood Hospitals","Nurture by Proactive","Maater"],"variants":["Delivery at a network hospital","Pre-natal consults","Post-natal care","Lactation support","Birthing & parenting class"]},{"id":"b15","title":"Elder & parent care","category":"Family, Kids & Care","funding":"member","action":"Book","amount":"Member price","status":"Only insurance enrolment exists","availability":"soon","terms":["elder","elderly","parents","senior citizen","ageing","home nursing","physiotherapy","physio","emergency response","caregiver"],"vendors":["Emoha","Portea Medical","Anvayaa","KITES Senior Care","Care24","Tribeca Care"],"variants":["Parent health check","Home nursing visit","Physiotherapy at home","Emergency response"]},{"id":"b16","title":"Short courses","category":"Learning & Development","funding":"policy","action":"Enrol","amount":"₹30,000 / year","status":"Company pays 75%, you pay 25%","availability":"live","terms":["course","training","upskill","learn","python","java","analytics","short course"],"vendors":["Coursera","LinkedIn Learning","Udemy","upGrad","Great Learning","Simplilearn"],"variants":["Technical skills course","Business & management course","Data & analytics course","Design & product course","Role-specific compliance course"]},{"id":"b17","title":"Certifications","category":"Learning & Development","funding":"policy","action":"Enrol","amount":"₹1L – ₹2L by band","status":"Company pays 75%, you pay 25%","availability":"live","terms":["certification","certificate","exam","credential","aws","pmp","renewal fee"],"vendors":["Simplilearn","Great Learning","upGrad","NIIT","Edureka","Henry Harvin"],"variants":["Technical certification","Functional certification","Institute programme — online","Institute programme — classroom","Exam & renewal fee"]},{"id":"b18","title":"Higher education","category":"Learning & Development","funding":"policy","action":"Enrol","amount":"Up to ₹5,00,000","status":"Company pays 75%, you pay 25%","availability":"live","terms":["degree","masters","mba","diploma","university","college","tuition","higher studies"],"vendors":["upGrad","Emeritus","Jaro Education","Talentedge","IIM/ISB/BITS online","institute direct"],"variants":["Degree","Diploma","Executive programme","Campus visit travel & stay"]},{"id":"b19","title":"Books & periodicals","category":"Learning & Development","funding":"flexi","action":"Buy","amount":"₹12,000 / year","status":"Cashless from your flexi allowance","availability":"live","terms":["book","books","ebook","kindle","audiobook","journal","magazine","reading","periodical"],"vendors":["Amazon","Kindle","Audible","Storytel","Kuku FM","Crossword"],"variants":["Print books","E-books","Audiobooks","Journals & periodicals","Research access"]},{"id":"b20","title":"Software, subscriptions & memberships","category":"Learning & Development","funding":"member","action":"Subscribe","amount":"You pay","status":"Not funded at your company","availability":"notplan","terms":["software","subscription","licence","license","saas","ai assistant","cloud storage","productivity tool"],"vendors":["direct","Zoho","Freshworks","professional bodies","ICAI / ICSI / IEI / PMI India","conference organisers"],"variants":["AI assistant subscription","Coding assistant","Design & creative tools","Productivity suite","Cloud storage"]},{"id":"b21","title":"Mobile handset","category":"Devices & Connectivity","funding":"flexi","action":"Buy","amount":"₹48,000 / year","status":"Cashless from your flexi allowance","availability":"live","terms":["phone","mobile","handset","smartphone","iphone","android","emi"],"vendors":["Amazon","Flipkart","Croma","Reliance Digital","Vijay Sales","ONDC electronics rail"],"variants":["Flagship handset","Mid-range handset","Handset on EMI","Trade-in & upgrade","Extended warranty"]},{"id":"b22","title":"Work laptop & IT asset","category":"Devices & Connectivity","funding":"policy","action":"Request","amount":"Company issued","status":"No cost to you as standard","availability":"live","terms":["laptop","computer","macbook","machine","it asset","repair","broken","replacement","standby"],"vendors":["existing IT procurement","Redington","Ingram Micro"],"variants":["Higher-spec upgrade on EMI","Accessory replacement","Repair & servicing","Standby device","End-of-term buyout"]},{"id":"b23","title":"Accessories & peripherals","category":"Devices & Connectivity","funding":"member","action":"Buy","amount":"Member price","status":"Goods — negotiated rate","availability":"live","terms":["headphones","monitor","keyboard","mouse","docking station","charger","cable","peripherals","accessory"],"vendors":["Amazon","Croma","boAt","Portronics","Zebronics","ONDC electronics rail"],"variants":["Headphones","External monitor","Keyboard & mouse","Docking station","Chargers & cables"]},{"id":"b24","title":"Domestic business travel","category":"Travel","funding":"policy","action":"Book","amount":"₹2,500 – ₹11,000 / night","status":"Cashless to your band cap","availability":"live","terms":["business travel","work trip","flight","train","hotel","tour","on tour","domestic travel"],"vendors":["MakeMyTrip myBiz","Yatra for Business","Cleartrip for Business","EaseMyTrip","TravelPerk (via partner)","ITILITE"],"variants":["Flight — class by band","Train","Hotel to band cap","Company guest house","Intra-city while on tour"]},{"id":"b25","title":"International & contest travel","category":"Travel","funding":"policy","action":"Book","amount":"₹11,000 – ₹22,000 / night","status":"Cashless to the trip budget","availability":"live","terms":["international","visa","overseas","abroad","foreign travel","contest travel"],"vendors":["MakeMyTrip myBiz","Thomas Cook India","SOTC","ITILITE","contest travel partner"],"variants":["Flight — class by band","Hotel — occupancy by band","Visa processing","Travel insurance","Sightseeing & itinerary"]},{"id":"b26","title":"Personal & family travel","category":"Travel","funding":"flexi","action":"Book","amount":"₹50,000 – ₹1,50,000","status":"Slab by band · GB04 and above","availability":"live","terms":["holiday","vacation","leisure travel","family trip","getaway","personal travel"],"vendors":["MakeMyTrip","Yatra","Cleartrip","IRCTC","EaseMyTrip","Ixigo"],"variants":["Domestic flight","Train","Hotel & stay","Holiday package","Booking for dependants"]},{"id":"b27","title":"Intercity relocation","category":"Relocation & Living","funding":"policy","action":"Arrange","amount":"₹20,000 – ₹1,80,000","status":"Cashless to your band and distance cap","availability":"live","terms":["relocation","relocate","moving city","movers","packers","shifting","transfer","intercity"],"vendors":["Agarwal Packers & Movers","Writer Relocations","Leo Packers","Allied Lemuir","NoBroker Move","Porter"],"variants":["Packers & movers","Vehicle transport","Packing & unpacking","Transit insurance","Loading & unloading"]},{"id":"b28","title":"Relocation travel & stay","category":"Relocation & Living","funding":"policy","action":"Book","amount":"₹2,000 – ₹11,000 / night","status":"Cashless to your band cap","availability":"live","terms":["temporary accommodation","guest house","reconnaissance","relocation travel","moving stay"],"vendors":["company guest house (owned)","OYO","Treebo","FabHotels","MakeMyTrip","Ginger Hotels"],"variants":["Travel for you & family","Temporary accommodation","Company guest house","Reconnaissance trip"]},{"id":"b29","title":"Home setup","category":"Relocation & Living","funding":"policy","action":"Arrange","amount":"₹10,000 – ₹70,000","status":"Cashless to band cap · taxed as perquisite","availability":"live","terms":["brokerage","broker","rent","rental agreement","deep clean","pest control","carpentry","appliance installation","setting up home"],"vendors":["NoBroker","Housing.com","MagicBricks","Urban Company (fit-out)","HICARE (pest)","Livspace (carpentry)"],"variants":["Brokerage","Pre-move-in deep clean","Pest control","Carpentry & modular fittings","Appliance installation — AC, TV, washing machine"]},{"id":"b30","title":"Furniture & appliance rental","category":"Relocation & Living","funding":"member","action":"Subscribe","amount":"Member price","status":"Monthly rental, cancel any time","availability":"soon","terms":["furniture","appliance","fridge","washing machine","sofa","bed","wardrobe","rental","rent furniture"],"vendors":["Furlenco","Rentomojo","CityFurnish","Fabrento","RentSetGo"],"variants":["Starter pack — bed, wardrobe, dining","Essential pack — plus sofa and fridge","Complete home","Individual items"]},{"id":"b31","title":"Local move & storage","category":"Relocation & Living","funding":"member","action":"Arrange","amount":"Member price","status":"Deliberately outside the policy","availability":"soon","terms":["local move","storage","store things","warehouse","single item shift"],"vendors":["Porter","NoBroker Move","Boxigo","Safexpress","Agarwal Packers","Storage Sutra"],"variants":["Local move — 1BHK to villa","Single-item shift","Short-term storage","Long-term storage","Home essentials starter pack"]},{"id":"b32","title":"Company events & offsites","category":"Experiences, Events & Recognition","funding":"budget","action":"Arrange","amount":"Free for you","status":"HR buys it — no cost to you","availability":"soon","terms":["offsite","event","party","celebration","sports day","awards","team outing","family day"],"vendors":["Thrillophilia","WanderOn","Kaleidoscope","Team Bonding India","regional event vendors"],"variants":["Team offsite","Festive celebration","Family day","Sports day","Awards night"]},{"id":"b33","title":"Recognition & gifting","category":"Experiences, Events & Recognition","funding":"policy","action":"Buy","amount":"Free for you","status":"HR buys it — no cost to you","availability":"live","terms":["award","reward","gift","hamper","recognition","milestone","appreciation","spot award"],"vendors":["Ferns N Petals","IGP","Bigsmall","Chumbak","The Gift Studio","Boxup"],"variants":["Milestone gift","Spot award","Festive hamper","Team celebration","Vendor & partner gifting"]},{"id":"b34","title":"Digital challenges","category":"Experiences, Events & Recognition","funding":"budget","action":"Arrange","amount":"Free for you","status":"HR buys it — no cost to you","availability":"live","terms":["challenge","steps","step count","wellness challenge","hydration","sleep challenge"],"vendors":["Step Tracker (owned)","GOQii","Stepathlon","Vantage Fit","Wellness360"],"variants":["Step challenge","Fitness cohort","Sleep & hydration challenge","Wellness month campaign"]}],"coins":2750,"rewardBalanceInr":31000,"orders":[{"id":"o1","benefitId":"b00","status":"active","when":"Renews 31 Mar","detail":"Cult.fit Koregaon Park · Member ID WP-4471"},{"id":"o2","benefitId":"b04","status":"upcoming","when":"Thu 13 Aug, 8:30 am","detail":"Metropolis · Baner Road, Pune"},{"id":"o3","benefitId":"b21","status":"progress","when":"Arrives Wed 12 Aug","detail":"Dispatched · Reliance Digital"},{"id":"o4","benefitId":"b17","status":"pending","when":"Sent 6 Aug","detail":"With Meera Iyer for approval"},{"id":"o5","benefitId":"b29","status":"quote","when":"Quote ready","detail":"Livspace · valid until 18 Aug"},{"id":"o6","benefitId":"b01","status":"done","when":"Sat 26 Jul","detail":"The Yoga House · Aundh"},{"id":"o7","benefitId":"b18","status":"rejected","when":"Decided 22 Jul","detail":"Outside this year’s L&D budget"},{"id":"o8","benefitId":"b03","status":"cancelled","when":"Cancelled 18 Jul","detail":"Clinic cancelled · nothing was taken"}],"categories":["Fitness & Movement","Health & Clinical Care","Mind & Emotional Wellbeing","Nutrition & Food","Family, Kids & Care","Learning & Development","Devices & Connectivity","Travel","Relocation & Living","Experiences, Events & Recognition"],"categoryNotes":[{"name":"Fitness & Movement","description":"Gyms, studios, courts and kit — from a single class to an annual membership."},{"name":"Health & Clinical Care","description":"Cover, consultations, tests, pharmacy, dental, vision and structured health programmes."},{"name":"Mind & Emotional Wellbeing","description":"One assistance programme covering counselling, self-help and assessment — plus the sessions a company runs for everyone."},{"name":"Nutrition & Food","description":"Diet guidance, supplements and the meals a company already pays for."},{"name":"Family, Kids & Care","description":"Childcare, maternity, child development, elder care and specialist therapy."},{"name":"Learning & Development","description":"Courses, certifications, degrees, reading and the skills either side of them."},{"name":"Devices & Connectivity","description":"Handset, laptop, home internet, software and the kit around them."},{"name":"Travel","description":"Business travel, personal travel and getaways — flights, stays and everything booked around them."},{"name":"Relocation & Living","description":"Moving a household and setting it up again, from the truck to the furniture in it."},{"name":"Experiences, Events & Recognition","description":"Things to do, occasions to mark, and the ways a company says thank you."}],"funding":{"flexi":{"label":"From your allowance","eligibility":"You set money aside for this in your flexi declaration.","how":"Cashless. The amount comes off the head as you use it — nothing to claim back."},"policy":{"label":"Company policy","eligibility":"Open to your band under company policy.","how":"Approved against your band cap, then arranged for you."},"budget":{"label":"Free for you","eligibility":"Open to everyone at WorkPerks.","how":"Paid for by your company. Nothing comes off your allowance."},"ins":{"label":"Cashless cover","eligibility":"Covered under your group policy.","how":"Settled directly with the provider. You show your ID and nothing else."},"member":{"label":"Corporate rate","eligibility":"Open to everyone at WorkPerks.","how":"You pay the negotiated rate — lower than the public price, no claim to file."}},"screens":["splash","intro","intro:1","intro:2","permission","loading","home","home:mods","home:all","home:rr","home:rrben","home:v2","coll:","home:loading","home:error","search","benefits","benefits:empty","cat:","detail:","offline","flow:","flow-err:","orders","orders:empty","order:","notifs","notifs:empty","rewards","saved","chat","profile","location","location:setup","recog","mgr:","company","rr:","hr:"]}</script>
 <script src="public/vendor/gsap.min.js"></script>

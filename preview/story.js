@@ -407,7 +407,7 @@
     mm.add({ motion: '(prefers-reduced-motion: no-preference)', wide: '(min-width: 901px)' }, function (ctx) {
       var c = ctx.conditions;
       if (bar) gsap.fromTo(bar, { scaleX: 0 }, { scaleX: 1, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: 0.3 } });
-      if (!c.motion) return;
+      if (!c.motion) { $$('#loop li').forEach(function (li) { li.classList.add('is-lit'); }); return; }
 
       /* a statement rises out of a mask, once */
       $$('.rv').forEach(function (el) {
@@ -416,16 +416,26 @@
             scrollTrigger: { trigger: el.parentElement, start: 'top 85%', once: true } });
       });
 
-      /* tilted cards arrive steeper and lower, then settle into their tilt */
-      [['.pb-stack', '.pc'], ['.lang', '.sheet'], ['.trust-grid', '.tr'], ['.sm-grid', '.sheet'],
-        ['.facts', '.fact'], ['.ev-grid', '.ev'], ['.disc', 'li']].forEach(function (g) {
-        var box = $(g[0]);
-        if (!box) return;
-        gsap.from($$(g[1], box), {
-          y: 70, opacity: 0, duration: 1.1, ease: 'expo.out', stagger: 0.12,
-          rotation: function (i, el) { return gsap.getProperty(el, 'rotation') * 2.5 + (i % 2 ? 2.5 : -2.5); },
-          scrollTrigger: { trigger: box, start: 'top 82%', once: true }
+      /* rows and columns rise into place, a beat apart */
+      [['.figs', 'div'], ['.facts', 'div'], ['.metrics', '.m-row'], ['.disc', 'li'], ['.cv-rec', 'li'],
+        ['.scope', 'div'], ['.who', 'div'], ['.screens', '.scr']].forEach(function (g) {
+        $$(g[0]).forEach(function (box) {
+          gsap.from($$(g[1], box), { y: 40, opacity: 0, duration: 1, ease: 'expo.out', stagger: 0.08,
+            scrollTrigger: { trigger: box, start: 'top 85%', once: true } });
         });
+      });
+
+      /* the build loop lights one step at a time */
+      var loopLis = $$('#loop li');
+      if (loopLis.length) ST.create({ trigger: '#loop', start: 'top 80%', once: true, onEnter: function () {
+        loopLis.forEach(function (li, i) { setTimeout(function () { li.classList.add('is-lit'); }, i * 180); });
+      } });
+
+      /* the real screens open out of a crop and drift at slightly different speeds */
+      $$('.scr img').forEach(function (img, i) {
+        gsap.fromTo(img, { clipPath: 'inset(16% 10% 16% 10% round 34px)' }, { clipPath: 'inset(0% 0% 0% 0% round 34px)', ease: 'none',
+          scrollTrigger: { trigger: '.screens', start: 'top 90%', end: 'top 35%', scrub: 0.5 } });
+        gsap.to(img, { y: [-20, -60, -35][i] || -30, ease: 'none', scrollTrigger: { trigger: '.screens', start: 'top bottom', end: 'bottom top', scrub: true } });
       });
 
       /* count-ups, once each */
@@ -436,16 +446,15 @@
           scrollTrigger: { trigger: n, start: 'top 88%', once: true } });
       });
 
-      /* the hero drifts as it leaves: the cards faster than the words */
-      var heroST = { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true };
-      gsap.to('#fan', { y: -80, ease: 'none', scrollTrigger: heroST });
-      gsap.to('.hero-copy', { y: -30, ease: 'none', scrollTrigger: heroST });
-      gsap.to('.n-hero', { y: -50, ease: 'none', scrollTrigger: heroST });
 
       if (!c.wide) return;
 
+      /* product -> problem: as the opening stage leaves, the phone recedes */
+      gsap.to('.act-a .a-phone .phone', { scale: 0.88, opacity: 0.3, y: -50, ease: 'none',
+        scrollTrigger: { trigger: '.act-a', start: 'bottom bottom', end: 'bottom 20%', scrub: true } });
+
       /* the pinned sequences: --p scrubbed from 0 to 1 over the first `data-span` of the scroll */
-      [[actC, drawC], [actE, drawE]].forEach(function (pair) {
+      [[$('.act-a'), function () {}], [actC, drawC], [actE, drawE]].forEach(function (pair) {
         var el = pair[0], draw = pair[1];
         if (!el) return;
         var span = Number(el.getAttribute('data-span')) || 1, state = { p: 0 };

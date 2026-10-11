@@ -49,3 +49,27 @@
   font-display: swap;
   src: url('public/fonts/Caveat-var-latin.woff2') format('woff2');
 }
+
+/* Space Grotesk (display) and Space Mono (metadata), SIL Open Font Licence,
+   latin subsets self-hosted for the dark edition. */
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('public/fonts/SpaceGrotesk-var-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Space Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('public/fonts/SpaceMono-400-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Space Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('public/fonts/SpaceMono-700-latin.woff2') format('woff2');
+}
