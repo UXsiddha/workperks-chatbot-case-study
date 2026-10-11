@@ -59,9 +59,6 @@ button { font: inherit; color: inherit; }
 .note { margin: 0; font: 600 1.55rem/1.05 var(--hand); color: var(--green); }
 .arrow { display: block; width: 92px; height: auto; fill: none; stroke: var(--green); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-/* the one reveal: a statement rises out of a mask */
-.js .rv { clip-path: inset(0 0 100% 0); transform: translateY(0.35em); transition: clip-path 1.1s var(--ease), transform 1.1s var(--ease); }
-.js .rv.in { clip-path: inset(-0.2em 0 -0.3em 0); transform: none; }
 
 /* ------------------------------------------------------------- bar */
 .bar { position: fixed; z-index: 50; top: 0; left: 0; right: 0; height: var(--bar); display: flex; align-items: center; gap: 2rem; padding-inline: var(--gutter); background: rgba(247, 244, 238, 0.94); }
@@ -114,14 +111,11 @@ button { font: inherit; color: inherit; }
 /* ============================================================= 2 · problem */
 .pb-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 3rem clamp(2rem, 6vw, 6rem); align-items: center; }
 .pb-stack { position: relative; list-style: none; margin: 0; padding: 0; height: 460px; }
-.pc { --r: 0deg; position: absolute; width: 250px; padding: 0.9rem 0.9rem 1.2rem; border-radius: var(--r-lg); background: var(--card); box-shadow: var(--shadow-lift); transform: rotate(var(--r)); transition: transform 1s var(--ease), opacity 0.8s var(--ease); }
+.pc { --r: 0deg; position: absolute; width: 250px; padding: 0.9rem 0.9rem 1.2rem; border-radius: var(--r-lg); background: var(--card); box-shadow: var(--shadow-lift); transform: rotate(var(--r)); }
 .pc p { margin: 0.85rem 0.3rem 0; font-size: 0.95rem; line-height: 1.4; color: var(--ink-2); }
 .pc-1 { --r: -6deg; top: 0; left: 4%; }
 .pc-2 { --r: 5deg; top: 120px; left: 40%; }
 .pc-3 { --r: -2deg; top: 245px; left: 10%; }
-.js .settle .pc { opacity: 0; transform: translateY(60px) rotate(calc(var(--r) * 2.5)); }
-.js .settle.in .pc { opacity: 1; transform: rotate(var(--r)); }
-.js .settle.in .pc-2 { transition-delay: 0.15s; } .js .settle.in .pc-3 { transition-delay: 0.3s; }
 .pc-in { display: grid; place-items: center; height: 118px; border-radius: 18px; }
 .pc-in b { font: 500 clamp(3rem, 5vw, 4.4rem)/1 var(--display); letter-spacing: -0.04em; color: var(--green); }
 .p-lav { background: var(--lav); } .p-olive { background: var(--olive); } .p-pink { background: var(--pink); } .p-sky { background: var(--sky); }

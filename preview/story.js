@@ -26,37 +26,6 @@
   }
 
 
-  /* --------------------------------------------------------- reveals
-     Only the statements marked .rv move; everything else is simply there. */
-  /* A statement starts fully clipped, which an observer reads as having no
-     area, so its parent is watched instead. */
-  var io = new IntersectionObserver(function (es) {
-    es.forEach(function (e) {
-      if (!e.isIntersecting) return;
-      (e.target.rvChild || e.target).classList.add('in'); io.unobserve(e.target);
-    });
-  }, { rootMargin: '0px 0px -12% 0px', threshold: 0 });
-  $$('.rv').forEach(function (n) { var w = n.parentElement; w.rvChild = n; io.observe(w); });
-  $$('.settle').forEach(function (n) { io.observe(n); });
-
-  /* --------------------------------------------------------- counters */
-  var cio = new IntersectionObserver(function (es) {
-    es.forEach(function (e) {
-      if (!e.isIntersecting) return;
-      cio.unobserve(e.target);
-      var n = e.target, to = Number(n.getAttribute('data-count'));
-      if (reduced) { n.textContent = to; return; }
-      var t0 = performance.now(), dur = 1300;
-      (function tick(t) {
-        var k = Math.min(1, (t - t0) / dur), ease = 1 - Math.pow(1 - k, 3);
-        n.textContent = Math.round(to * ease);
-        if (k < 1) requestAnimationFrame(tick);
-      })(t0);
-    });
-  }, { threshold: 0.6 });
-  $$('[data-count]').forEach(function (n) { n.textContent = '0'; cio.observe(n); });
-
-
   /* ================================================================ phones */
   /* One phone, the way the app's chat screen shapes it: status bar, title,
      the thread, and (when interactive) the input. */
@@ -217,40 +186,14 @@
   var root = document.documentElement;
   var narrow = window.matchMedia('(max-width: 900px)');
   var clamp = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
-  var pins = $$('[data-pin]');
-  var actA = $('.act-a'), actC = $('.act-c'), actE = $('.act-e');
+  var actC = $('.act-c'), actE = $('.act-e');
   var sysLis = $$('#sys li');
   var noPin = false;
   function setMode() {
     noPin = narrow.matches || reduced;
     root.classList.toggle('no-pin', noPin);
-    if (actA) {
-      actA.classList.toggle('is-settled', noPin);
-      $('.a-built', actA).inert = !noPin;
-      measureA();
-    }
     if (actC) actC.classList.toggle('is-after', noPin);
     sysLis.forEach(function (li) { li.classList.toggle('is-on', noPin); li.style.setProperty('--f', noPin ? 1 : 0); });
-  }
-
-  /* A: the dark stage starts as a panel around the phone, then grows */
-  function measureA() {
-    if (!actA || noPin) return;
-    var st = $('.a-stage', actA).getBoundingClientRect(), ph = $('#phone-hero').getBoundingClientRect();
-    var cap = $('.a-phone', actA).getBoundingClientRect(), copy = $('.a-hero', actA).getBoundingClientRect();
-    var pad = Math.min(90, Math.max(32, (ph.left - copy.right) / 2));
-    actA.style.setProperty('--l0', Math.max(12, ph.left - st.left - pad) + 'px');
-    actA.style.setProperty('--r0', Math.max(12, st.right - ph.right - pad) + 'px');
-    actA.style.setProperty('--t0', Math.max(12, ph.top - st.top - 36) + 'px');
-    actA.style.setProperty('--b0', Math.max(12, st.bottom - cap.bottom - 28) + 'px');
-  }
-  function drawA(p, q) {
-    actA.style.setProperty('--q', q.toFixed(4));
-    var settled = p > 0.97;
-    if (settled !== actA.classList.contains('is-settled')) {
-      actA.classList.toggle('is-settled', settled);
-      $('.a-built', actA).inert = !settled;
-    }
   }
 
   /* C: the line runs between the first and last remaining dots */
@@ -271,37 +214,7 @@
     });
   }
 
-  var bar = $('.bar-progress i'), ticking = false;
-  function frame() {
-    ticking = false;
-    var vh = window.innerHeight;
-    if (bar) bar.style.transform = 'scaleX(' + (root.scrollTop / Math.max(1, root.scrollHeight - root.clientHeight)).toFixed(4) + ')';
-    if (noPin) return;
-    pins.forEach(function (el) {
-      var r = el.getBoundingClientRect();
-      if (r.bottom < -vh || r.top > vh * 1.5) return;
-      var span = Number(el.getAttribute('data-span')) || 1;
-      var p = clamp((-r.top) / Math.max(1, r.height - vh) / span);
-      el.style.setProperty('--p', p.toFixed(4));
-      if (el === actA) drawA(p, clamp((vh - r.bottom) / vh));
-      else if (el === actC) drawC(p);
-      else if (el === actE) drawE(p);
-    });
-  }
-  var onScroll = function () { if (!ticking) { ticking = true; requestAnimationFrame(frame); } };
-
-  /* "What I built" lives inside the pinned opening, so a link to it scrolls
-     to the point where that chapter has settled, then moves focus there. */
-  $$('a[href="#built"]').forEach(function (a) {
-    a.addEventListener('click', function (e) {
-      if (noPin || !actA) return;
-      e.preventDefault();
-      var span = Number(actA.getAttribute('data-span')) || 1;
-      var y = actA.offsetTop + (actA.offsetHeight - window.innerHeight) * Math.min(1, span + 0.04);
-      window.scrollTo({ top: y, behavior: reduced ? 'auto' : 'smooth' });
-      setTimeout(function () { $('#built-h').focus({ preventScroll: true }); }, reduced ? 0 : 700);
-    });
-  });
+  var bar = $('.bar-progress i');
 
   /* C: once the steps have become one place to ask, real questions are typed into it */
   var typed = $('#c-typed');
@@ -327,12 +240,6 @@
     window.addEventListener('scroll', kick, { passive: true });
     new IntersectionObserver(function (es) { if (es[0].isIntersecting) kick(); }, { threshold: 0.6 }).observe($('.c-ask'));
   }
-
-  /* G: one learning at a time */
-  var learnIO = new IntersectionObserver(function (es) {
-    es.forEach(function (e) { e.target.classList.toggle('is-on', e.isIntersecting); });
-  }, { rootMargin: '-38% 0px -38% 0px' });
-  $$('#learn li').forEach(function (li) { if (reduced) li.classList.add('is-on'); else learnIO.observe(li); });
 
   /* ================================================== the 268, by kind, in turn */
   var FAM = [['variant', 104, 'What is Yoga?'], ['benefit', 70, 'Tell me about gym memberships'], ['edge case', 25, 'asdfgh · an emoji · book me a gym'],
@@ -419,21 +326,10 @@
     var s = STEPS[i], q = s.asks[s.asks.length - 1], code = $('.st-route', li);
     if (code) code.textContent = fmtRoute(s.direct || WP.route(q));
   });
-  if (cdP && stepEls.length) {
-    if (narrow.matches || reduced) {
-      autoplay(stick, STEPS.length, function (i) { stCur = -1; runStep(i); }, 9000);
-    } else {
-      var stTimer = null;
-      var stIO = new IntersectionObserver(function (es) {
-        es.forEach(function (e) {
-          if (!e.isIntersecting) return;
-          var i = stepEls.indexOf(e.target);
-          clearTimeout(stTimer);
-          stTimer = setTimeout(function () { runStep(i); }, 150);
-        });
-      }, { rootMargin: '-42% 0px -42% 0px' });
-      stepEls.forEach(function (li) { stIO.observe(li); });
-    }
+  /* wide screens with motion: ScrollTrigger plays each step (see the end).
+     Everything else plays the steps in turn. */
+  if (cdP && stepEls.length && (narrow.matches || reduced || !window.ScrollTrigger)) {
+    autoplay(stick, STEPS.length, function (i) { stCur = -1; runStep(i); }, 9000);
   }
 
   /* phrasings converge on one tool. The route is worked out here, for each one. */
@@ -496,9 +392,84 @@
   });
 
 
+  /* ================================================== scroll animation, with GSAP
+     ScrollTrigger drives every scroll-linked moment: the reading bar, the
+     statement reveals, cards settling into their tilt, the hero's restrained
+     parallax, the count-ups, the two pinned sequences and the story steps.
+     Reduced motion gets none of it. Narrow screens keep the reveals and the
+     settling, and the pinned sequences sit in their end state (.no-pin). */
+  var stTimer = null;
+  function initScroll() {
+    if (!window.gsap || !window.ScrollTrigger) return;
+    var gsap = window.gsap, ST = window.ScrollTrigger;
+    gsap.registerPlugin(ST);
+    var mm = gsap.matchMedia();
+    mm.add({ motion: '(prefers-reduced-motion: no-preference)', wide: '(min-width: 901px)' }, function (ctx) {
+      var c = ctx.conditions;
+      if (bar) gsap.fromTo(bar, { scaleX: 0 }, { scaleX: 1, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: 0.3 } });
+      if (!c.motion) return;
+
+      /* a statement rises out of a mask, once */
+      $$('.rv').forEach(function (el) {
+        gsap.fromTo(el, { clipPath: 'inset(0% 0% 100% 0%)', y: '0.35em' },
+          { clipPath: 'inset(-20% 0% -30% 0%)', y: 0, duration: 1.1, ease: 'expo.out',
+            scrollTrigger: { trigger: el.parentElement, start: 'top 85%', once: true } });
+      });
+
+      /* tilted cards arrive steeper and lower, then settle into their tilt */
+      [['.pb-stack', '.pc'], ['.lang', '.sheet'], ['.trust-grid', '.tr'], ['.sm-grid', '.sheet'],
+        ['.facts', '.fact'], ['.ev-grid', '.ev'], ['.disc', 'li']].forEach(function (g) {
+        var box = $(g[0]);
+        if (!box) return;
+        gsap.from($$(g[1], box), {
+          y: 70, opacity: 0, duration: 1.1, ease: 'expo.out', stagger: 0.12,
+          rotation: function (i, el) { return gsap.getProperty(el, 'rotation') * 2.5 + (i % 2 ? 2.5 : -2.5); },
+          scrollTrigger: { trigger: box, start: 'top 82%', once: true }
+        });
+      });
+
+      /* count-ups, once each */
+      $$('[data-count]').forEach(function (n) {
+        var to = Number(n.getAttribute('data-count')), o = { v: 0 };
+        n.textContent = '0';
+        gsap.to(o, { v: to, duration: 1.4, ease: 'power3.out', onUpdate: function () { n.textContent = Math.round(o.v); },
+          scrollTrigger: { trigger: n, start: 'top 88%', once: true } });
+      });
+
+      /* the hero drifts as it leaves: the cards faster than the words */
+      var heroST = { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true };
+      gsap.to('#fan', { y: -80, ease: 'none', scrollTrigger: heroST });
+      gsap.to('.hero-copy', { y: -30, ease: 'none', scrollTrigger: heroST });
+      gsap.to('.n-hero', { y: -50, ease: 'none', scrollTrigger: heroST });
+
+      if (!c.wide) return;
+
+      /* the pinned sequences: --p scrubbed from 0 to 1 over the first `data-span` of the scroll */
+      [[actC, drawC], [actE, drawE]].forEach(function (pair) {
+        var el = pair[0], draw = pair[1];
+        if (!el) return;
+        var span = Number(el.getAttribute('data-span')) || 1, state = { p: 0 };
+        gsap.to(state, { p: 1, ease: 'none',
+          onUpdate: function () { el.style.setProperty('--p', state.p.toFixed(4)); draw(state.p); },
+          scrollTrigger: { trigger: el, start: 'top top', scrub: 0.6, invalidateOnRefresh: true,
+            end: function () { return '+=' + Math.max(1, (el.offsetHeight - window.innerHeight) * span); } } });
+      });
+
+      /* the story: a step plays once it has held the middle of the screen briefly */
+      if (cdP) stepEls.forEach(function (li, i) {
+        ST.create({ trigger: li, start: 'top 58%', end: 'bottom 42%',
+          onToggle: function (self) {
+            if (!self.isActive) return;
+            clearTimeout(stTimer);
+            stTimer = setTimeout(function () { runStep(i); }, 150);
+          } });
+      });
+    });
+    /* fonts and images change heights after load */
+    window.addEventListener('load', function () { ST.refresh(); });
+  }
+
   setMode();
-  if (narrow.addEventListener) narrow.addEventListener('change', function () { setMode(); onScroll(); });
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', function () { measureA(); onScroll(); });
-  onScroll();
+  if (narrow.addEventListener) narrow.addEventListener('change', setMode);
+  initScroll();
 })();
