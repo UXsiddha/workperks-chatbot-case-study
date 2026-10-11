@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#111214">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23111214'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23FF8A3D'/%3E%3C/svg%3E">
 <title>WorkPerks Chatbot, a product design case study</title>
-<meta name="description" content="I built an AI assistant that makes employee benefits easier to use: designed, built and validated end to end.">
+<meta name="description" content="I built an AI assistant that makes employee benefits easier to use, designed and built end to end.">
 <link rel="preload" href="public/fonts/figtree-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="public/fonts/Geist-var-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="fonts.css">
@@ -21,7 +21,7 @@
 <header class="bar" aria-label="Case study">
   <a class="bar-id" href="https://uxsiddha.github.io/home"><b>SP</b><span>Sathyasiddha Pattanaik</span></a>
   <nav class="bar-nav" aria-label="Chapters">
-    <a class="slink" href="#problem"><sup>01/</sup>Problem</a><a class="slink" href="#conv-design"><sup>02/</sup>Conversation</a><a class="slink" href="#works"><sup>03/</sup>System</a><a class="slink" href="#building"><sup>04/</sup>Build</a><a class="slink" href="#testing"><sup>05/</sup>Testing</a><a class="slink" href="#learnings"><sup>06/</sup>Learnings</a>
+    <a class="slink" href="#problem"><sup>01/</sup>Problem</a><a class="slink" href="#conv-design"><sup>02/</sup>Conversation</a><a class="slink" href="#works"><sup>03/</sup>System</a><a class="slink" href="#building"><sup>04/</sup>Build</a><a class="slink" href="#learnings"><sup>05/</sup>Learnings</a>
   </nav>
   <a class="btn btn-solid" href="#try">Try the prototype</a>
   <span class="bar-progress" aria-hidden="true"><i></i></span>
@@ -37,13 +37,13 @@
     <div class="a-surface" aria-hidden="true"></div>
     <div class="wrap a-grid">
       <div class="a-hero">
-        <div class="mark"><span>01</span><span>Case study</span><span>Aug&ndash;Sep 2026</span></div>
+        <div class="mark"><span>01</span><span>Case study</span><span>Aug to Sep 2026</span></div>
         <h1 id="hero-h" class="h-hero">I built an AI assistant that makes employee benefits easier to use.<span class="cur" aria-hidden="true"></span></h1>
-        <p class="lede">A conversational layer over WorkPerks that helps employees discover, understand and act on their benefits &mdash; designed, built and validated end to end.</p>
+        <p class="lede">A conversational layer over WorkPerks that helps employees discover, understand and act on their benefits, designed and built end to end.</p>
         <dl class="cols">
           <div><dt>Role</dt><dd>Product designer, end to end</dd></div>
           <div><dt>Built with</dt><dd>Claude Code &middot; Next.js &middot; Node &middot; Gemini</dd></div>
-          <div><dt>Timeline</dt><dd>Three weeks, Aug&ndash;Sep 2026</dd></div>
+          <div><dt>Timeline</dt><dd>Three weeks, Aug to Sep 2026</dd></div>
         </dl>
       </div>
       <div class="a-phone"><div class="phone" id="phone-hero"></div></div>
@@ -174,7 +174,7 @@
       <li><q>tablets every day for my blood pressure</q><b>Pharmacy &amp; medical supplies</b><i class="ok">Right</i></li>
       <li><q>sleeping badly, running on empty</q><b>Digital challenges</b><i class="no">Wrong &rarr; Employee Assistance Programme</i></li>
     </ol>
-    <p class="fine">The benefit each answer led with, in the recorded run behind the held-out comparison in Testing.</p>
+    <p class="fine">The benefit each answer led with, in one recorded run.</p>
   </div>
 
   <div class="wrap trust">
@@ -197,7 +197,7 @@
   <div class="wrap ba-wrap">
     <div class="ba-head">
       <p class="kicker">Clarity over AI-sounding language</p>
-      <h3 class="h-sub">Three answers I rewrote after testing.</h3>
+      <h3 class="h-sub">Three answers I rewrote.</h3>
       <p class="body-sm">Each is recorded in the code, with the question that exposed it.</p>
       <p class="ba-switch" aria-hidden="true"><span data-ba="before" class="is-on">Before</span><span data-ba="after">After</span></p>
     </div>
@@ -210,14 +210,14 @@
       </li>
       <li>
         <p class="ba-q">how do I claim this back</p>
-        <div class="ba-b is-before"><p>I can&rsquo;t do claiming expenses back myself &mdash; I can explain anything and take you to where it happens.</p><p class="ba-miss">No button followed.</p></div>
+        <div class="ba-b is-before"><p>I can&rsquo;t do claiming expenses back myself. I can explain anything and take you to where it happens.</p><p class="ba-miss">No button followed.</p></div>
         <div class="ba-b is-after"><p class="ba-lbl">When there&rsquo;s no screen to offer</p><p>I can&rsquo;t do claiming expenses back myself, and there is no screen in this app for it. I can explain how it works, or find you something else.</p></div>
         <p class="ba-why">It promised a screen it couldn&rsquo;t show. Now the promise only comes with a button, and without one it says so.</p>
       </li>
       <li>
         <p class="ba-q">can I get a Bata voucher</p>
         <div class="ba-b is-before"><p>You can purchase a Bata voucher, which is redeemable in store only. Your voucher code will be masked once you complete the&hellip;</p><p class="ba-miss">No price, value or discount.</p></div>
-        <div class="ba-b is-after"><p>Yes &mdash; Bata is available at <i class="ba-f">price</i>, redeemed <i class="ba-f">where</i>.</p><p class="ba-rows"><span>Value</span><span>Redeemed</span><span>In stock</span></p><p class="ba-chips"><i>Where can I use my Bata voucher?</i></p></div>
+        <div class="ba-b is-after"><p>Yes, Bata is available at <i class="ba-f">price</i>, redeemed <i class="ba-f">where</i>.</p><p class="ba-rows"><span>Value</span><span>Redeemed</span><span>In stock</span></p><p class="ba-chips"><i>Where can I use my Bata voucher?</i></p></div>
         <p class="ba-why">Prose lost the facts. Figures now sit in rows, filled live from the supplier, which the AI&rsquo;s phrasing never touches.</p>
       </li>
     </ol>
@@ -237,7 +237,7 @@
         <li data-k="1"><span class="sys-k">AI router</span><div class="sys-node is-ai"><code>cannot_do</code><small>thing: cancel my gym booking<br>screen: orders</small></div><p class="sys-p">One call. The model reads the sentence and returns the name of a tool. Never a fact.</p></li>
         <li data-k="2"><span class="sys-k">Tools</span><div class="sys-node"><b>Names what it can&rsquo;t do</b><small>and checks the screen exists</small></div><p class="sys-p">Ordinary code, one per kind of question. Each returns data, or the reason there is none.</p></li>
         <li data-k="3"><span class="sys-k">Application data &middot; APIs</span><div class="sys-node"><b>Your orders</b><small>a screen the app confirmed it has</small></div><p class="sys-p">The app&rsquo;s own data, or the voucher supplier&rsquo;s API through a small proxy.</p></li>
-        <li data-k="4"><span class="sys-k">Response</span><div class="sys-node is-out"><p>I can&rsquo;t do cancelling your gym booking myself &mdash; I can explain anything and take you to where it happens.</p><span class="sys-btn">Your orders</span></div><p class="sys-p">Built by the app, in code. Every button goes to a screen the app confirmed it has.</p></li>
+        <li data-k="4"><span class="sys-k">Response</span><div class="sys-node is-out"><p>I can&rsquo;t do cancelling your gym booking myself. I can explain anything and take you to where it happens.</p><span class="sys-btn">Your orders</span></div><p class="sys-p">Built by the app, in code. Every button goes to a screen the app confirmed it has.</p></li>
       </ol>
       <p class="sys-note">In the app the model fills in the tool&rsquo;s arguments; the ones shown are what this page&rsquo;s keyword layer produces for the same question.</p>
     </div>
@@ -313,30 +313,10 @@
   </div>
 </section>
 
-<!-- ================================================= 07 TESTING -->
-<section class="sec testing" id="testing" aria-labelledby="test-h">
-  <div class="wrap">
-    <div class="mark"><span>07</span><span>Testing and validation</span></div>
-    <h2 id="test-h" class="h-statement rv">Not to prove it worked. <em>To check it behaved the way I decided it should.</em></h2>
-    <p class="body ev-scope">Automated and scripted evaluations of the assistant&rsquo;s behaviour. They don&rsquo;t show universal accuracy, and they aren&rsquo;t usability or business results.</p>
-    <div class="metrics">
-      <div class="m-row"><p class="m-num"><span data-count="268">268</span></p><div class="m-txt"><p class="m-k">Generated scenarios</p><p>Generated from the live catalogue rather than written by hand.</p></div></div>
-      <div class="m-row"><p class="m-num"><span data-count="261">261</span><small>/268</small></p><div class="m-txt"><p class="m-k">Real answers, no rule broken</p><p>Ended in a real answer with none of eleven automated rules broken. Five of the seven left are correct refusals.</p></div></div>
-      <div class="m-row"><p class="m-num"><span data-count="18">18</span><small>/20</small></p><div class="m-txt"><p class="m-k">Held-out comparison &middot; measured once, 1 September</p><p>Situation questions that reached the right benefit with the AI, against <b>3 of 20</b> for keyword search alone.</p>
-        <div class="vs-bars" aria-hidden="true"><div><span>With the AI</span><i style="--w:90%"></i><b>18/20</b></div><div><span>Keywords only</span><i style="--w:15%"></i><b>3/20</b></div></div></div></div>
-    </div>
-    <div class="fam-wrap">
-      <p class="kicker">The 268, by kind of question</p>
-      <div class="families" id="families"></div>
-      <p class="family-q" id="family-q" aria-live="polite"></p>
-    </div>
-  </div>
-</section>
-
-<!-- ================================================= 08 WHAT I LEARNED -->
+<!-- ================================================= 07 WHAT I LEARNED -->
 <section class="sec learnings" id="learnings" aria-labelledby="learn-h">
   <div class="wrap">
-    <div class="mark"><span>08</span><span>What I learned</span></div>
+    <div class="mark"><span>07</span><span>What I learned</span></div>
     <h2 id="learn-h" class="visually-hidden">What I learned</h2>
     <ol class="learn" id="learn">
       <li><h3 class="rv">AI UX is behaviour design.</h3><p>The screen was the easy part. The work was deciding what the AI may decide, and how a no still helps.</p></li>
@@ -352,10 +332,10 @@
   </div>
 </section>
 
-<!-- ================================================= 09 DISCOVERIES -->
+<!-- ================================================= 08 DISCOVERIES -->
 <section class="sec discoveries" id="discoveries" aria-labelledby="disc-h">
   <div class="wrap">
-    <div class="mark"><span>09</span><span>Real-world discoveries</span></div>
+    <div class="mark"><span>08</span><span>Real-world discoveries</span></div>
     <h2 id="disc-h" class="h-sec">Reality doesn&rsquo;t behave like documentation.</h2>
     <p class="body">Six supplier behaviours the integration guide doesn&rsquo;t document, found by running the integration on the account I had access to.</p>
     <ol class="disc">
@@ -370,12 +350,12 @@
   </div>
 </section>
 
-<!-- ================================================= 10 FINAL PROTOTYPE: back to the opening's phone -->
+<!-- ================================================= 09 FINAL PROTOTYPE: back to the opening's phone -->
 <section class="sec try" id="try" aria-labelledby="try-h">
   <div class="try-stage">
     <div class="wrap a-grid try-grid">
       <div class="try-copy">
-        <div class="mark"><span>10</span><span>The prototype</span></div>
+        <div class="mark"><span>09</span><span>The prototype</span></div>
         <h2 id="try-h" class="h-sec">Try the assistant yourself.</h2>
         <p class="body-sm">The prototype&rsquo;s own tools, renderer and catalogue: 35 benefits (27 switched on for this employee), a wallet and eight past orders. The AI can&rsquo;t run in a static page, so typing is matched by the app&rsquo;s keyword backup layer.</p>
         <ol class="asks" aria-label="Try asking">
