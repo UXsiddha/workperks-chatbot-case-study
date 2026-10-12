@@ -15,14 +15,29 @@
   var wait = function (ms) { return new Promise(function (ok) { setTimeout(ok, reduced ? 0 : ms); }); };
 
   /* Every demo outside "Try it yourself" plays itself: show(i) for each step
-     in turn, looping, and only while it is on screen. */
-  function autoplay(el, count, show, ms) {
-    var i = -1, t = null;
-    var tick = function () { i = (i + 1) % count; show(i); t = setTimeout(tick, typeof ms === 'function' ? ms(i) : ms); };
+     in turn, looping, and only while it is on screen. Reduced motion gets the
+     last step (the fix, the full answer), still. Given an element, a
+     Pause / Play button follows it. */
+  function autoplay(el, count, show, ms, after) {
+    if (reduced) { show(count - 1); return; }
+    var i = -1, t = null, seen = false, stopped = false;
+    var gap = function () { return typeof ms === 'function' ? ms(i) : ms; };
+    var tick = function () { i = (i + 1) % count; show(i); t = setTimeout(tick, gap()); };
+    var halt = function () { clearTimeout(t); t = null; };
+    var run = function () { if (seen && !stopped && !t) { if (i < 0) tick(); else t = setTimeout(tick, gap()); } };
     new IntersectionObserver(function (es) {
-      if (es[0].isIntersecting) { if (!t) tick(); }
-      else { clearTimeout(t); t = null; }
+      seen = es[0].isIntersecting;
+      if (seen) run(); else halt();
     }, { threshold: 0.25 }).observe(el);
+    if (!after) return;
+    var btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'ap-toggle'; btn.textContent = 'Pause demo';
+    btn.addEventListener('click', function () {
+      stopped = !stopped;
+      btn.textContent = stopped ? 'Play demo' : 'Pause demo';
+      if (stopped) halt(); else run();
+    });
+    after.insertAdjacentElement('afterend', btn);
   }
 
 
@@ -40,7 +55,8 @@
       '<div class="ph-screen">' +
         '<div class="ph-status" aria-hidden="true"><span>9:41</span><i></i></div>' +
         '<div class="ph-bar"><span class="ph-back" aria-hidden="true">&lsaquo;</span><span><b>WorkPerks AI</b><em>Live from your benefits catalogue</em></span></div>' +
-        '<div class="ph-thread" role="log" aria-live="polite" aria-label="Conversation with the assistant"></div>' +
+        /* only the phone the visitor types into announces its replies */
+        '<div class="ph-thread"' + (root.hasAttribute('data-interactive') ? ' role="log" aria-live="polite"' : '') + ' aria-label="Conversation with the assistant"></div>' +
         '<form class="ph-form" autocomplete="off"><input class="ph-input" type="text" placeholder="Ask anything" aria-label="Ask the assistant a question"><button type="submit" class="ph-send"><span aria-hidden="true">&rarr;</span><span class="vh">Send</span></button></form>' +
       '</div>';
     this.thread = $('.ph-thread', root);
@@ -175,7 +191,7 @@
       rows.forEach(function (li, k) { li.classList.toggle('is-now', k === i); });
       p.greet();
       p.typeAndAsk(rows[i].getAttribute('data-q'), function () { return g === gen; });
-    }, 6500);
+    }, 6500, p.root);
   })();
 
   /* ================================================== the pinned sequences
@@ -327,9 +343,19 @@
     if (code) code.textContent = fmtRoute(s.direct || WP.route(q));
   });
   /* wide screens with motion: ScrollTrigger plays each step (see the end).
-     Everything else plays the steps in turn. */
+     Everything else shows the first step and plays another on request, so
+     nothing changes while it is being read. */
   if (cdP && stepEls.length && (narrow.matches || reduced || !window.ScrollTrigger)) {
-    autoplay(stick, STEPS.length, function (i) { stCur = -1; runStep(i); }, 9000);
+    stepEls.forEach(function (li, i) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'ap-toggle st-play'; b.textContent = 'Play in the phone';
+      b.addEventListener('click', function () {
+        stCur = -1; runStep(i);
+        stick.scrollIntoView({ block: 'start', behavior: reduced ? 'auto' : 'smooth' });
+      });
+      li.appendChild(b);
+    });
+    runStep(0);
   }
 
   /* phrasings converge on one tool. The route is worked out here, for each one. */
@@ -367,7 +393,7 @@
       cvLines();
     };
     cvPick(0);
-    autoplay(cv, SAYS.length, cvPick, 2400);
+    autoplay(cv, SAYS.length, cvPick, 2400, $('.phr-l > :last-child'));
     window.addEventListener('resize', cvLines);
   }
 
@@ -378,7 +404,7 @@
       ba.classList.toggle('is-after', v === 'after');
       $$('[data-ba]').forEach(function (b) { b.classList.toggle('is-on', b.getAttribute('data-ba') === v); });
     };
-    autoplay(ba, 2, function (i) { baSet(i ? 'after' : 'before'); }, function (i) { return i ? 5500 : 3500; });
+    autoplay(ba, 2, function (i) { baSet(i ? 'after' : 'before'); }, function (i) { return i ? 5500 : 3500; }, $('.ba-switch'));
   }
 
   /* the voice examples are the renderer's own output, first block only */
@@ -478,6 +504,32 @@
     window.addEventListener('load', function () { ST.refresh(); });
   }
 
+  /* below 1080px the chapter links fold into a Chapters menu under the bar:
+     Escape or a chosen chapter closes it, and focus goes back to the button */
+  function chapterMenu() {
+    var bar = $('.bar'), nav = $('.bar-nav'), cta = $('.bar .btn');
+    if (!bar || !nav) return;
+    nav.id = nav.id || 'chapters';
+    var btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'bar-menu'; btn.textContent = 'Chapters';
+    btn.setAttribute('aria-expanded', 'false'); btn.setAttribute('aria-controls', nav.id);
+    bar.insertBefore(btn, cta || null);
+    var set = function (open, refocus) {
+      nav.classList.toggle('is-open', open);
+      btn.setAttribute('aria-expanded', String(open));
+      if (!open && refocus) btn.focus();
+    };
+    btn.addEventListener('click', function () { set(!nav.classList.contains('is-open')); });
+    nav.addEventListener('click', function (e) { if (e.target.closest('a')) set(false); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && nav.classList.contains('is-open')) set(false, true);
+    });
+    document.addEventListener('click', function (e) {
+      if (nav.classList.contains('is-open') && !bar.contains(e.target)) set(false);
+    });
+  }
+
+  chapterMenu();
   setMode();
   if (narrow.addEventListener) narrow.addEventListener('change', setMode);
   initScroll();

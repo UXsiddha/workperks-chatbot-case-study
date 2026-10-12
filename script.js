@@ -131,6 +131,23 @@
   })();
 
 
+  /* ---- The looping recordings: a Pause / Play button under each; reduced
+           motion gets the still frame and starts nothing. ---------------- */
+  document.querySelectorAll('video.loop-vid').forEach(function (v) {
+    if (reduced) { v.removeAttribute('autoplay'); v.pause(); }
+    else { var p = v.play(); if (p) p.catch(function () {}); }
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'vid-toggle';
+    var label = function () { b.textContent = v.paused ? 'Play recording' : 'Pause recording'; };
+    b.addEventListener('click', function () { if (v.paused) v.play(); else v.pause(); });
+    v.addEventListener('play', label); v.addEventListener('pause', label);
+    label();
+    /* inside the clipped hero frame it sits over the recording's corner */
+    if (v.closest('.hero-device')) { b.classList.add('on-media'); v.parentNode.appendChild(b); }
+    else v.insertAdjacentElement('afterend', b);
+  });
+
+
   /* ---- Everything below is ambient motion. ---------------------------- */
   if (reduced) return;
 

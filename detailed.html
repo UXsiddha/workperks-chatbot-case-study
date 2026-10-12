@@ -10,7 +10,7 @@
 <meta name="description" content="The deep dive behind the WorkPerks Chatbot case study: every layer by filename, the voucher proxy, the data boundary, every capability and the fallback ladder.">
 <link rel="preload" href="public/fonts/BricolageGrotesque-600-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="public/fonts/Geist-var-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="public/screens/flow-ask.gif" as="image" fetchpriority="high">
+<link rel="preload" href="public/screens/flow-ask-still.webp" as="image" fetchpriority="high">
 <link rel="stylesheet" href="fonts.css">
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -117,9 +117,7 @@
         </div>
 
         <div class="hero-device">
-          <img src="public/screens/flow-ask.gif" width="840" height="1760"
-               alt="Animation of one interaction. The assistant&rsquo;s fresh state; the question what can I get is sent and a thinking indicator appears; the answer arrives, eight of thirty-five benefits matching as numbered rows; then the screen reached by tapping the first row, Gym and fitness memberships, with its price, what it covers and a subscribe button."
-               fetchpriority="high" decoding="async">
+          <video class="loop-vid" src="public/screens/flow-ask.mp4" poster="public/screens/flow-ask-still.webp" width="840" height="1760" autoplay muted loop playsinline preload="metadata" aria-label="Animation of one interaction. The assistant&rsquo;s fresh state; the question what can I get is sent and a thinking indicator appears; the answer arrives, eight of thirty-five benefits matching as numbered rows; then the screen reached by tapping the first row, Gym and fitness memberships, with its price, what it covers and a subscribe button."></video>
         </div>
 
         <div class="hero-notes">
@@ -977,7 +975,7 @@
 
     <div class="gif-row" data-reveal>
       <figure class="phone gif">
-        <img src="public/screens/flow-guards.gif" width="840" height="1760" alt="Animation of three money answers. What can I get returns five of eleven brands that can be bought. What do I have sends a question, then the answer arrives listing six held vouchers with codes masked and a warning that three were delivered under a different brand than ordered. A request for a brand that cannot be bought names the brand and quotes the supplier&rsquo;s own reason." loading="lazy" decoding="async">
+        <video class="loop-vid" src="public/screens/flow-guards.mp4" poster="public/screens/flow-guards-still.webp" width="840" height="1760" autoplay muted loop playsinline preload="metadata" aria-label="Animation of three money answers. What can I get returns five of eleven brands that can be bought. What do I have sends a question, then the answer arrives listing six held vouchers with codes masked and a warning that three were delivered under a different brand than ordered. A request for a brand that cannot be bought names the brand and quotes the supplier&rsquo;s own reason."></video>
         <figcaption><span>Live</span><b>Available, held, refused</b>What the supplier has, what the employee already holds with codes
         masked, and a brand it cannot offer, named with the reason given.</figcaption>
       </figure>

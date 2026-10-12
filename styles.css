@@ -1491,7 +1491,13 @@ code, .mono {
     0 2px 4px rgba(0, 0, 0, 0.4),
     0 44px 90px -30px rgba(0, 0, 0, 0.85);
 }
-.hero-device img { display: block; width: 100%; height: auto; }
+.hero-device img, .hero-device video { display: block; width: 100%; height: auto; }
+.hero-device { position: relative; }
+.phone.gif video { display: block; width: 100%; height: auto; box-shadow: 0 0 0 1px var(--line), 0 30px 60px -40px rgba(16,17,20,0.4); }
+/* Pause / Play under a looping recording (script.js) */
+.vid-toggle { display: block; margin: 0.9rem auto 0; min-height: 2.75rem; padding: 0 1.1rem; border: 1px solid currentColor; border-radius: 999px; background: transparent; color: inherit; font: 500 0.72rem/1 var(--mono, monospace); letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; opacity: 0.8; }
+.vid-toggle:hover { opacity: 1; }
+.vid-toggle.on-media { position: absolute; right: 0.75rem; bottom: 0.75rem; margin: 0; min-height: 2.25rem; padding: 0 0.9rem; border-color: rgba(255, 255, 255, 0.55); background: rgba(10, 11, 14, 0.72); color: #fff; opacity: 1; }
 
 .hero-visual figcaption {
   max-width: 30em;
